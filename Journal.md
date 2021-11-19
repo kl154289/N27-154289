@@ -22,6 +22,8 @@
 
 ## 19.11.2021
 * Commentar mit <!----> 
-* 
+* email Terminal anzeigen: git config --global user.email     
+* Name Terminal anzeigen: git config --global user.name
+
 
 
