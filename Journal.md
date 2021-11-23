@@ -30,7 +30,7 @@
     * 3. Eine Nachricht zu den Vorgenommen Änderungen eintippen.
     * 4. Commit-Haken klicken 
     * 5. Pull und Pusch auslösen, indem auf das Rädchen oder Wolke gecklickt werden.
-* * Feiltaste nach oben letzter Befel   
+* Feiltaste nach oben letzter Befel   
 
 ## 23.11.2021
 
