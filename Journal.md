@@ -29,9 +29,11 @@
     * 2. in VSC auf das Git-Symbol kliken, in der Leiste ganz links. Die Anzahl der Anstehenden Änderungen werden in einen blauen Kreis angezeigt 
     * 3. Eine Nachricht zu den Vorgenommen Änderungen eintippen.
     * 4. Commit-Haken klicken 
-    * 5. Pull und Pusch auslösen, indem auf das Rädchen oder Wolke gecklickt werden. 
+    * 5. Pull und Pusch auslösen, indem auf das Rädchen oder Wolke gecklickt werden.
+* * Feiltaste nach oben letzter Befel   
 
 ## 23.11.2021
+
  
 
 
