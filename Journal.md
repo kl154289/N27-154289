@@ -33,6 +33,7 @@
 * Feiltaste nach oben letzter Befel   
 
 ## 23.11.2021
+* Journal aktualiesiert 
 
  
 
