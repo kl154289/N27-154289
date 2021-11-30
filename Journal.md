@@ -47,8 +47,8 @@
  * Strg+C Server stoppen 
  * npm install ejs 
  * Mit dem Befehl ipconfig kann man sich die eigene ip Adresse anzeigenlassen
- * Mit dem Befehl ping und die Ip prüfen ob ein Rechner online ist
-  
+ * Mit dem Befehl ping und die Ip, prüfet man ob ein Rechner online ist
+
 
 
  
