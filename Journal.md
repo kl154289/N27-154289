@@ -36,7 +36,11 @@
 * Journal aktualiesiert 
 
 ## 26.11.2021
+ * Quelltext kopiren im Explorer (server.js,package-lock.json,package.json)
  * server starten .\node_modules\.bin\nodemon .\server.js
+
+ ## 30.11.2021
+
  
 
  
