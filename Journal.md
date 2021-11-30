@@ -37,9 +37,12 @@
 
 ## 26.11.2021
  * Quelltext kopiren im Explorer (server.js,package-lock.json,package.json)
- * server starten .\node_modules\.bin\nodemon .\server.js
+ * Terminal server starten .\node_modules\.bin\nodemon .\server.js
+ * Terminal B npm indtall nodem 
+
 
  ## 30.11.2021
+ 
 
  
 
