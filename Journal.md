@@ -40,10 +40,10 @@
  * Terminal server starten .\node_modules\.bin\nodemon .\server.js
  * Terminal B npm indtall nodem 
 
-
- ## 30.11.2021
- 
-
+## 30.11.2021
+ * Strg+C Server stoppen 
+ * npm install ejs 
+ * ipconfig ip anzeigenlassen 
  
 
  
