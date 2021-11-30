@@ -41,10 +41,14 @@
  * Terminal B npm indtall nodem 
 
 ## 30.11.2021
+ * Am Anfang der Stunde wir der Server gestartet, dazu die Feiltaste nach oben gedrückt um den Befehl auszuwählen 
+ * im Browser wird der Inhalt über die Adresse localhost: 3000 aufgerufen 
+ * der localhost ist der eigene Rechner 
  * Strg+C Server stoppen 
  * npm install ejs 
- * ipconfig ip anzeigenlassen 
- 
+ * Mit dem Befehl ipconfig kann man sich die eigene ip Adresse anzeigenlassen
+  
+
 
  
 
