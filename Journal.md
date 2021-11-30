@@ -36,7 +36,8 @@
 * Journal aktualiesiert 
 
 ## 26.11.2021
-
+ * server starten .\node_modules\.bin\nodemon .\server.js
+ 
 
  
 
