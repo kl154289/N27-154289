@@ -50,6 +50,11 @@
  * Mit dem Befehl ping und die Ip, prüfet man ob ein Rechner online ist
 
 ## 3.12.2021
+* Schriftart ändern mit css
+* HTML-Grundgerüst erstellen
+* Button erstellen 
+* style einfügen über styles.css- Datei
+* Geschweifte Klammer mit ALTGr+7 erstellen 
 
 
 
