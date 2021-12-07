@@ -56,6 +56,10 @@
 * style einfügen über styles.css- Datei
 * Geschweifte Klammer mit ALTGr+7 erstellen 
 
+## 7.12.2021
+* Schriftart in der styles.css geändert 
+* styles.css in public- Ordner verschoben 
+
 
 
 
