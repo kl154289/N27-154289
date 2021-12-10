@@ -58,7 +58,15 @@
 
 ## 7.12.2021
 * Schriftart in der styles.css geändert 
-* styles.css in public- Ordner verschoben 
+* styles.css in public- Ordner verschoben
+## 10.12.2021
+* verschidene Elemente in HTML recherchieren und einbauen 
+* verschidene Elemente in HTML style
+* Quellen im Internet zwischen gut und schlecht unterscheiden z.B. w3schools.com
+
+## 14.01.2022 - K2
+* HTML 
+* CSS 
 
 
 
