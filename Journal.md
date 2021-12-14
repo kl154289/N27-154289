@@ -67,7 +67,8 @@
 * png und .jpg downloaden(https://commons.wikimedia.org) und auf der Webseit einfügen mit <img src="Bild" alt="Bild bezeichnung"width="größe"> oder mit background-image: url('Bild'); in css. 
 * Unterschied zwischen png und jpg
 * Alt-Tag beim Bild verstehen (für Leute mit Barriere) 
-
+* hyperlink einbauen mit <a href="Link">Wort zum Anklicken</a> 
+* Target in Hyperlink einbauen 
 
 ## 14.01.2022 - K2
 * HTML 
