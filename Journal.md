@@ -63,6 +63,11 @@
 * verschidene Elemente in HTML recherchieren und einbauen 
 * verschidene Elemente in HTML style
 * Quellen im Internet zwischen gut und schlecht unterscheiden z.B. w3schools.com
+## 14.12.2021
+* png und .jpg downloaden(https://commons.wikimedia.org) und auf der Webseit einfügen mit <img src="Bild" alt="Bild bezeichnung"width="größe"> oder mit background-image: url('Bild'); in css. 
+* Unterschied zwischen png und jpg
+* Alt-Tag beim Bild verstehen (für Leute mit Barriere) 
+
 
 ## 14.01.2022 - K2
 * HTML 
