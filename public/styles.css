@@ -14,3 +14,11 @@ h1 {
 b { font-size: small;}
 
 div { background-color: rgb(0, 0, 0);}
+
+
+ul {
+  list-style: square inside url("Small_icon_meta.png") ;
+} 
+
+
+

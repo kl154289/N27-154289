@@ -69,6 +69,7 @@
 * Alt-Tag beim Bild verstehen (für Leute mit Barriere) 
 * hyperlink einbauen mit <a href="Link">Wort zum Anklicken</a> 
 * Target in Hyperlink einbauen 
+## 17.12.2021
 
 ## 14.01.2022 - K2
 * HTML 
