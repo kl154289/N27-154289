@@ -59,21 +59,32 @@
 ## 7.12.2021
 * Schriftart in der styles.css geändert 
 * styles.css in public- Ordner verschoben
+
 ## 10.12.2021
 * verschidene Elemente in HTML recherchieren und einbauen 
 * verschidene Elemente in HTML style
 * Quellen im Internet zwischen gut und schlecht unterscheiden z.B. w3schools.com
+
 ## 14.12.2021
 * png und .jpg downloaden(https://commons.wikimedia.org) und auf der Webseit einfügen mit <img src="Bild" alt="Bild bezeichnung"width="größe"> oder mit background-image: url('Bild'); in css. 
 * Unterschied zwischen png und jpg
 * Alt-Tag beim Bild verstehen (für Leute mit Barriere) 
 * hyperlink einbauen mit <a href="Link">Wort zum Anklicken</a> 
-* Target in Hyperlink einbauen 
+* Target in Hyperlink einbauen
+
 ## 17.12.2021
+* Tabelle einfügen und Zeilen <tr{=tabel-row}> und Zellen <td{tabel-data}> in html Tabellen verstehen 
+* Listen geordnet <ol> und ungeordnete <ul> verstehen
+* In ungeordneten Listen den Aufzählungspunkt gegen ein Bild ersetzen 
+* Horizontale Line <hr> einbauen 
+
+## 21.12.2021
+* Zeilen umbruch <br> einbauen 
 
 ## 14.01.2022 - K2
-* HTML 
-* CSS 
+* Ein Lauffähiges Projekt mit einer leehren index.ejs wird ausgeteilt. styles.css anlegen und in der index Datei einbauen.
+* Teil 1: HTML u. CSS nach Vorgabe einbauen. 
+* Teil 2: Unbekanntes Problem mit hilfe des Internets lösen 
 
 
 
