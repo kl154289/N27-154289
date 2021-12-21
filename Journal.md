@@ -83,6 +83,7 @@
 
 ## 14.01.2022 - K2
 * Ein Lauffähiges Projekt mit einer leehren index.ejs wird ausgeteilt. styles.css anlegen und in der index Datei einbauen.
+Server satarten 
 * Teil 1: HTML u. CSS nach Vorgabe einbauen. 
 * Teil 2: Unbekanntes Problem mit hilfe des Internets lösen 
 
