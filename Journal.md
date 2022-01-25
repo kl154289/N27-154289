@@ -97,7 +97,7 @@ Server satarten
 * Verlinkung von login nach index und zurück erstellen 
 
 ## 25.1.2022
-*Unterschid zwischen app.post und app.get verstehen. app.get('login') wird ausgeführt wenn die seite vom Browser angefordert wird. app.post('login') wird ausgeführt wenn der Butten auf der Loginseite gedrückt wird. 
+* Unterschid zwischen app.post und app.get verstehen. app.get('login') wird ausgeführt wenn die seite vom Browser angefordert wird. app.post('login') wird ausgeführt wenn der Butten auf der Loginseite gedrückt wird. 
 
 
 
