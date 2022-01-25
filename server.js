@@ -22,7 +22,7 @@ app.get('/login',(req, res, next) => {
 
     res.render('login.ejs', {})          
 })
-
+// Die app.post('login')wird ausgeführt sobald der Butten auf dem loginformular gedrückt wird.
 app.post('/login',(req, res, next) => {              
     res.render('index.ejs', {})          
 })
