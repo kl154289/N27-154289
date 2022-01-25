@@ -100,7 +100,7 @@ Server satarten
 * Unterschid zwischen app.post und app.get verstehen. app.get('login') wird ausgeführt wenn die seite vom Browser angefordert wird. app.post('login') wird ausgeführt wenn der Butten auf der Loginseite gedrückt wird. 
 
 
-
+ 
  
 
 
