@@ -87,6 +87,15 @@ Server satarten
 * Teil 1: HTML u. CSS nach Vorgabe einbauen. 
 * Teil 2: Unbekanntes Problem mit hilfe des Internets lösen 
 
+## 21.01.2022
+* login.ejs erstellt 
+* Klausur geschrieben 
+* login-Seite erstellen 
+* formular aus w3schools kopiert und eingebaut
+* Type der Inputs entsprechend von Text auf Password bzw. Nummer geändert 
+* die ID der inputs setzen 
+* Verlinkung von login nach index und zurück erstellen 
+
 
 
 
