@@ -25,4 +25,4 @@ meineApp.get('/login',(browserAnfrage, serverAntwort, next) => {
 // Die meineApp.post('login')wird ausgeführt sobald der Butten auf dem loginformular gedrückt wird.
 meineApp.post('/login',(browserAnfrage, serverAntwort, next) => {              
     serverAntwort.render('index.ejs', {})          
-})
+}) 
