@@ -80,7 +80,7 @@ if(punkteBayern < punkteDortmund){
     console.log("Bayern ist Meister")
 }
 
-console.log("Übung 6 - Prüfung des MwSt-Satzes:")
+console.log("Übung 7 - Prüfung des MwSt-Satzes:")
 let lebensmittel = true
 
 if(lebensmittel){
@@ -92,7 +92,32 @@ if(lebensmittel){
 // Erkenntnisgewinn: Wenn der Ausdruck (hier: lebensmittel) true oder false ist,
 // ist kein vergleichsoperator (== oder ===) notwendig. 
 
-console.log("Übung 7 - Die Prüfung ist immer true:")
+console.log("Übung 8 - Die Prüfung ist immer true:")
 if(true){
     console.log("Diese Prüfung ist immer wahr.")
+}
+console.log("Übung 9 - Die Prüfung von Zahlen:")
+let a8 = 2
+let b8 = 2
+
+if(a8 - b8){
+    console.log("Die Prüfung ist true")
+}else{
+    console.log("Die Prüefung ist false")
+}
+
+// Erkenntnisgewinn:
+// Die Zahl 0 ist fals 
+// Eine Positive Zahl ist true 
+// Eine Negative Zahle ist true
+
+console.log("Übung 10 - Saldo:")
+
+let einzahlung = 1000
+let auszahlung = 1000
+
+if(einzahlung-auszahlung){
+    console.log("Der Saldo ist nicht null")
+}else{
+    console.log("Der Saldo ist null")
 }

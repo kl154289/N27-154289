@@ -7,6 +7,21 @@
 // c) Instanzieren Sie ein Objekt der Klasse
 // d) Initialisieren Sie das Objekt mit Eigenschaftswerten
 
+class Spieler{
+    constructor(){
+        this.Name
+        this.Position
+        this.Verein
+        this.Nummer 
+    }
+}
+
+let spielerMueller = new Spieler () 
+
+spielerMueller.Name = "Thomas Müller"
+spielerMueller.Nummer = 25
+spielerMueller.Position = "Stürmer"
+spielerMueller.Verein = "?" 
 
 
 
