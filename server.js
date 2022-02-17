@@ -55,10 +55,18 @@ meineApp.post('/login',(browserAnfrage, serverAntwort, next) => {
 
     console.log("Id des Kunden: " + idKunde) 
     console.log("Kennwort des Kunden: " + kennwort)
+
+    // Die Identität des Kunden wird überprüft. 
+    // if and javascript 
     
-    if(idKunde == kunde.IdKunde){
+    if(idKunde == kunde.IdKunde && kennwort == kunde.Kennwort){
+
+        // Wenn die Id des Kunden mit der Eingabe im Browser übereinstimmt
+        // Und("&&") das Kennwort ebenfalls 
+        // dann gibt der SErver die gerenderte Index-Seite zurück.
         serverAntwort.render('index.ejs', {})          
     }else{
+        // Wenn sie nicht übereinstimmen wird die Login-Seite geladen. 
     serverAntwort.render('login.ejs', {})  
     }
     serverAntwort.render('login.ejs', {})         
