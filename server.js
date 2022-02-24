@@ -37,9 +37,11 @@ kunde.Kennwort = "123"
 const express = require('express')
 const bodyParser = require('body-parser')
 const meineApp = express()
+const cookieParser = require('cookie-parser') 
 meineApp.set('view engine', 'ejs')
 meineApp.use(express.static('public'))
 meineApp.use(bodyParser.urlencoded({extended: true}))
+meineApp.use(cookieParser('geheim'))
 
 const server = meineApp.listen(process.env.PORT || 3000, () => {
     console.log('Server lauscht auf Port %s', server.address().port)    
@@ -54,7 +56,11 @@ meineApp.get('/',(browserAnfrage, serverAntwort, next) => {
     // Wenn der Kunde bereits angemeldet ist, soll die 
     // Index-Seite an den Browser gegeben werden.
 
-    if(true){
+    // Wenn ein signierter Cookie mit Namen 'istAngemeldetAls' im Browser vorhanden ist,
+    // dann ist die Prüfung wahr und es wird die gerenderte Index.Seite an den Browser
+    // zurückgegeben. Anderfalls wird die Login.Seite sn den Browser gegeben. 
+
+    if(browserAnfrage.signedCookies['istAngemeldetAls']){
         serverAntwort.render('index.ejs')
     }else{
 
@@ -71,7 +77,14 @@ meineApp.get('/',(browserAnfrage, serverAntwort, next) => {
     })          
 })
 
-meineApp.post('/login',(browserAnfrage, serverAntwort, next) => {        
+// Die Methode meineApp.post('/login') wird abgearbeitet, sobald 
+// der Anwender im Login-Formular auf "Einloggen" klickt. 
+
+meineApp.post('/login',(browserAnfrage, serverAntwort, next) => {   
+    
+    // Die im Browser eingegebene IdKunde und Kennwort werden zugewiesen
+    // an die Konstante namens idKunde und kennwort.
+
     const idKunde = browserAnfrage.body.IdKunde 
     const kennwort = browserAnfrage.body.Kennwort
 
@@ -82,6 +95,13 @@ meineApp.post('/login',(browserAnfrage, serverAntwort, next) => {
     // if and javascript 
     
     if(idKunde == kunde.IdKunde && kennwort == kunde.Kennwort){
+
+        // Ein Cookie namens 'istAngemeldetAls' wird beim Browser gesetzt.#
+        // Der Wert des Cookies ist das in eine Zeichenkette umgewandelte Kunden-Objekt.
+        // Der Cookie wird signiert, also gegen Manpulation geschützt. 
+
+        serverAntwort.cookie('istAngemeldetAls',JSON.stringify(kunde),{signed:true})
+        console.log("Der Cookie wurde erfolgreich gesetzt")
 
         // Wenn die Id des Kunden mit der Eingabe im Browser übereinstimmt
         // Und("&&") das Kennwort ebenfalls 
@@ -101,8 +121,11 @@ meineApp.post('/login',(browserAnfrage, serverAntwort, next) => {
 
 // Wenn die login-Seite im Browser aufgerufen wird, ...
 
-meineApp.get('/login',(browserAnfrage, serverAntwort, next) => {              
+meineApp.get('/login',(browserAnfrage, serverAntwort, next) => {  
+    
+    // Der Cookie wird gelöscht 
 
+    serverAntwort.clearCookie('istAngemeldetAls')
     // ... dann wird die login.ejs vom Server gerendert an den
     // Browser zurückgegeben:
 
