@@ -8,14 +8,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">    
     <title>Login</title>
 </head>
-<body> 
-  <h1>Bitte anmelden!</h1>   
-    <form method="post">
-        <label for="fname">Benutzer-ID:</label><br>
-        <input type="number" name="IdKunde"><br>
-        <label for="lname">Kennwort:</label><br>
-        <input type="password" name="Kennwort"><br><br>
-        <button formaction="/login">Einloggen</button>
-      </form> 
+<body>    
+  <div class="rahmen">
+      <div class="kopf">
+          <h1>N27 Bank</h1>
+      </div>
+      <div class="navigationsleiste">
+           Bitte anmelden
+      </div>
+      <div class="inhaltsbereich">
+          <form method="post">
+              <label for="fname">Benutzer-ID:</label><br>
+              <input type="number" name="IdKunde"><br>
+              <label for="lname">Kennwort:</label><br>
+              <input type="password" name="Kennwort"><br><br>        
+              <button class="login" formaction="/login">Einloggen</button>
+          </form> 
+          <p class="meldung"><%= meldung %></p>
+      </div>
+      <div class="fusszeile">
+          Footer
+      </div>
+  </div>
 </body>
 </html>

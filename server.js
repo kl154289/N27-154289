@@ -45,8 +45,30 @@ const server = meineApp.listen(process.env.PORT || 3000, () => {
     console.log('Server lauscht auf Port %s', server.address().port)    
 })
 
-meineApp.get('/',(browserAnfrage, serverAntwort, next) => {              
-    serverAntwort.render('index.ejs', {})          
+// Die Methode meineApp.get('/'...) wird abgearbeitet, wenn
+// der Kunde die Indexseite (locolhost:3000 btw. 
+// n27.herokuapp.com) ansurft. 
+
+meineApp.get('/',(browserAnfrage, serverAntwort, next) => {
+
+    // Wenn der Kunde bereits angemeldet ist, soll die 
+    // Index-Seite an den Browser gegeben werden.
+
+    if(true){
+        serverAntwort.render('index.ejs')
+    }else{
+
+    // Wenn der Kunde nichtbereits angemeldet ist, soll die 
+    // Login-Seite an den Browser gegeben werden.
+
+        serverAntwort.render('login.ejs', {
+            meldung : ""
+        })  
+
+    }              
+    serverAntwort.render('login.ejs', {
+        meldung : ""
+    })          
 })
 
 meineApp.post('/login',(browserAnfrage, serverAntwort, next) => {        
@@ -67,9 +89,13 @@ meineApp.post('/login',(browserAnfrage, serverAntwort, next) => {
         serverAntwort.render('index.ejs', {})          
     }else{
         // Wenn sie nicht übereinstimmen wird die Login-Seite geladen. 
-    serverAntwort.render('login.ejs', {})  
+    serverAntwort.render('login.ejs', {
+        meldung : "Ihre Zugangsdaten sind falsch."
+    })  
     }
-    serverAntwort.render('login.ejs', {})         
+    serverAntwort.render('login.ejs', {
+        meldung : "Bitte geben sie ihere Zugangsdaten ein. "
+    })         
         
 })
 
@@ -80,7 +106,9 @@ meineApp.get('/login',(browserAnfrage, serverAntwort, next) => {
     // ... dann wird die login.ejs vom Server gerendert an den
     // Browser zurückgegeben:
 
-    serverAntwort.render('login.ejs', {})          
+    serverAntwort.render('login.ejs', {
+        meldung : "Bitte geben sie ihere Zugangsdaten ein."
+    })          
 })
 // Die meineApp.post('login')wird ausgeführt sobald der Butten auf dem loginformular gedrückt wird.
 meineApp.post('/login',(browserAnfrage, serverAntwort, next) => {              
