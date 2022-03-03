@@ -134,10 +134,10 @@ meineApp.get('/login',(browserAnfrage, serverAntwort, next) => {
     })          
 })
 // Die meineApp.post('login')wird ausgeführt sobald der Butten auf dem loginformular gedrückt wird.
-meineApp.post('/login',(browserAnfrage, serverAntwort, next) => {              
-    serverAntwort.render('index.ejs', {})          
+meineApp.get('/about',(browserAnfrage, serverAntwort, next) => {              
+    serverAntwort.render('about.ejs', {})          
 }) 
 
 
 // require('./Uebungen/ifUndElse.js')
-require('./Uebungen/klasseUndObjekt.js')
+// require('./Uebungen/klasseUndObjekt.js')
