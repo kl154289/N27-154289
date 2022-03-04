@@ -11,11 +11,11 @@
 }
 
 .navigationsleiste {  
-  font-family: Arial, Helvetica, sans-serif;    
+  font-family: Arial, Helvetica, sans-serif; 
+  color: rgb(119, 107, 107);  
   background-color: rgb(119, 107, 107);        
   font-size: 2vh;    
-  text-align:center;  
-  color: white;      
+  text-align:center;      
   margin-bottom: 20px;
 }
 
