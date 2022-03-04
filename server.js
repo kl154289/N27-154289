@@ -137,6 +137,9 @@ meineApp.get('/login',(browserAnfrage, serverAntwort, next) => {
 meineApp.get('/about',(browserAnfrage, serverAntwort, next) => {              
     serverAntwort.render('about.ejs', {})          
 }) 
+meineApp.get('/profil',(browserAnfrage, serverAntwort, next) => {              
+    serverAntwort.render('profil.ejs', {})          
+}) 
 
 
 // require('./Uebungen/ifUndElse.js')
