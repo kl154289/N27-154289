@@ -14,6 +14,7 @@ class Kunde{
         this.Kontostand
         this.Geburtsdatum
         this.Mail 
+        this.Telefohn
     }
 }
 
@@ -138,9 +139,20 @@ meineApp.get('/about',(browserAnfrage, serverAntwort, next) => {
     serverAntwort.render('about.ejs', {})          
 }) 
 meineApp.get('/profil',(browserAnfrage, serverAntwort, next) => {              
-    serverAntwort.render('profil.ejs', {})          
+    serverAntwort.render('profil.ejs', {
+        vorname: kunde.Vorname,
+        nachname: kunde.Nachname
+    }) 
+           
 }) 
 
+meineApp.post('/profil',(browserAnfrage, serverAntwort, next) =>{ 
+    serverAntwort.render('profil.ejs', {})
+
+
+
+}) 
 
 // require('./Uebungen/ifUndElse.js')
 // require('./Uebungen/klasseUndObjekt.js')
+

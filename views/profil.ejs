@@ -15,9 +15,9 @@
             <h1>N27 - Profil</h1>            
         </div>
         <div class="navigationsleiste">
-            <a href="/about"><i class="fa fa-info fa-2x" aria-hidden="true"></i> </a> 
-             - 
             <a href="/"><i class="fa fa-home fa-2x" aria-hidden="true"></i> </a> 
+            -
+            <a href="/about"><i class="fa fa-info fa-2x" aria-hidden="true"></i> </a> 
              - 
             <a href="/profil"><i class="fa fa-user-circle-o fa-2x" aria-hidden="true"></i></a>
              - 
@@ -25,8 +25,12 @@
             
             
         </div>
-        <div class="inhaltsbereich">
-    
+        <div class="inhaltsbereich"> 
+            <p>Vorname:</p>
+            <p class="meldung1"><%= vorname %></p>
+            <p>Nachnahme:</p>
+            <p class="meldung1"><%= nachname %></p> 
+            <button class="speichern">Speichern</button>
         </div>
         <div class="fusszeile">
             &copy; 2022 GW21A

@@ -76,8 +76,22 @@ label {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 2vh;  
   color: red;
-}
   
+}
+.meldung1 {
+  width: 80%;
+  margin-bottom: 10px;
+  margin-right: 10%;
+  margin-left: 10%;  
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 2vh;  
+  color: rgb(0, 0, 0);
+  border: 1px solid rgb(0, 0, 0);
+  border-radius: 3px;
+  box-sizing: border-box;
+  } 
+
+
 .divii {
   border-radius: 5px;
   background-color: #f2f2f2;
