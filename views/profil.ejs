@@ -26,11 +26,19 @@
             
         </div>
         <div class="inhaltsbereich"> 
-            <p>Vorname:</p>
-            <p class="meldung1"><%= vorname %></p>
-            <p>Nachnahme:</p>
-            <p class="meldung1"><%= nachname %></p> 
-            <button class="speichern">Speichern</button>
+            
+            <form method="post">
+                <label1 for="fname">Vorname:</label><br>
+                <input class="meldung1" readonly value=<%= vorname %> <br><br>
+                <label1 for="lname">Nachname:</label><br>
+                <input class="meldung1" readonly value=<%= nachname %> <br><br> 
+                <label1 for="lname"> Email:</label><br>
+                <input type="email" name="mail" class="meldung1" value=<%= mail %> <br><br> 
+                <label1 for="lname"> Telefon:</label><br>
+                <input type="" class="meldung1" value=<%= telefon %> > <br><br>     
+                <button class="save" formaction="/profil">Speichern</button>
+            </form>
+           
         </div>
         <div class="fusszeile">
             &copy; 2022 GW21A
