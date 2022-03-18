@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  
   <link rel="icon" type="image/vnd.microsoft.icon" href="favicon.ico">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -15,14 +16,25 @@
           <h1>N27 Bank</h1>
       </div>
       <div class="navigationsleiste">
-           Bitte anmelden
+        <a href="/login"><i class="fa fa-sign-in fa-2x"></i></a>
       </div>
       <div class="inhaltsbereich">
           <form method="post">
               <label for="fname">Benutzer-ID:</label><br>
               <input type="number" name="IdKunde"><br>
               <label for="lname">Kennwort:</label><br>
-              <input type="password" name="Kennwort"><br><br>        
+              <input type="password" name="Kennwort" id="myInput"><br><br>
+              <input type="checkbox" onclick="myFunction()">
+              <script>
+                function myFunction() {
+                  var x = document.getElementById("myInput");
+                  if (x.type === "password") {
+                    x.type = "text";
+                  } else {
+                    x.type = "password";
+                  }
+                }
+                </script> 
               <button class="login" formaction="/login">Einloggen</button>
           </form> 
           <p class="meldung" ><%= meldung %></p>

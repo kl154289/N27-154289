@@ -144,7 +144,8 @@ meineApp.get('/profil',(browserAnfrage, serverAntwort, next) => {
         vorname: kunde.Vorname,
         nachname: kunde.Nachname,
         telefon: kunde.Telefon,
-        mail: kunde.Mail
+        mail: kunde.Mail,
+        password: kunde.Kennwort 
     }) 
            
 }) 
@@ -154,7 +155,8 @@ meineApp.post('/profil',(browserAnfrage, serverAntwort, next) => {
         vorname: kunde.Vorname,
         nachname: kunde.Nachname,
         telefon: kunde.Telefon,
-        mail: kunde.Mail
+        mail: kunde.Mail,
+        password: kunde.Kennwort
     })
 
 }) 
