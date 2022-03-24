@@ -15,16 +15,28 @@
             <h1>N27 - Profil</h1>            
         </div>
         <div class="navigationsleiste">
-            <a href="/"><i class="fa fa-home fa-2x" aria-hidden="true"></i> </a> 
-            -
-            <a href="/about"><i class="fa fa-info fa-2x" aria-hidden="true"></i> </a> 
-             - 
-            <a href="/profil"><i class="fa fa-user-circle-o fa-2x" aria-hidden="true"></i></a>
-             - 
-            <a href="/login"><i class="fa fa-sign-out fa-2x"></i></a>
-            
-            
-        </div>
+          <div class="tooltip">
+          <a href="/"><i class="fa fa-home fa-2x" aria-hidden="true"></i> </a> 
+          <span class="tooltiptext">Home</span>
+      </div>
+           -
+          <div class="tooltip">
+              <a href="/about"><i class="fa fa-info fa-2x" aria-hidden="true"></i> </a> 
+              <span class="tooltiptext">Über uns</span>
+          </div>
+          
+           - 
+           <div class="tooltip">
+              <a href="/profil"><i class="fa fa-user-circle-o fa-2x" aria-hidden="true"></i></a>
+              <span class="tooltiptext">Konto</span>
+          </div>
+          
+           - 
+           <div class="tooltip">
+              <a href="/login"><i class="fa fa-sign-out fa-2x"></i></a>
+              <span class="tooltiptext">Ausloggen</span>
+          </div>   
+      </div>
         <div class="inhaltsbereich"> 
             
             <form method="post">
@@ -36,9 +48,11 @@
                 <input type="email" name="mail" class="meldung1" value=<%= mail %> <br><br> 
                 <label1 for="lname"> Telefon:</label><br>
                 <input type="tel" class="meldung1" value=<%= telefon %> <br><br>
-                <label1 for="lname"> Password:</label><br>
+                <label1 for="lname"> Passwort:</label><br>
                 <input type="password" id="myInput" class="meldung1" value=<%= password %> <br><br>
-                <input type="checkbox" onclick="myFunction()">
+                <input type="checkbox" name="checkbox1" id="checkbox1" onclick="myFunction()">
+                <label1 for="checkbox1"></label1><br>
+              
               <script>
                 function myFunction() {
                   var x = document.getElementById("myInput");
