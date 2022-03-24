@@ -72,11 +72,7 @@ meineApp.get('/',(browserAnfrage, serverAntwort, next) => {
         serverAntwort.render('login.ejs', {
             meldung : ""
         })  
-
-    }              
-    serverAntwort.render('login.ejs', {
-        meldung : ""
-    })          
+    }        
 })
 
 // Die Methode meineApp.post('/login') wird abgearbeitet, sobald 
@@ -139,26 +135,38 @@ meineApp.get('/login',(browserAnfrage, serverAntwort, next) => {
 meineApp.get('/about',(browserAnfrage, serverAntwort, next) => {              
     serverAntwort.render('about.ejs', {})          
 }) 
+
 meineApp.get('/profil',(browserAnfrage, serverAntwort, next) => {              
     serverAntwort.render('profil.ejs', {
-        vorname: kunde.Vorname,
-        nachname: kunde.Nachname,
-        telefon: kunde.Telefon,
-        mail: kunde.Mail,
-        password: kunde.Kennwort 
+        Vorname: kunde.Vorname,
+        Nachname: kunde.Nachname,
+        Telefon: kunde.Telefon,
+        Mail: kunde.Mail,
+        Password: kunde.Kennwort 
     }) 
-           
 }) 
 
-meineApp.post('/profil',(browserAnfrage, serverAntwort, next) => { 
-    serverAntwort.render('profil.ejs', {
-        vorname: kunde.Vorname,
-        nachname: kunde.Nachname,
-        telefon: kunde.Telefon,
-        mail: kunde.Mail,
-        password: kunde.Kennwort
-    })
+// Sobald der Speicher butten auf der Profilseite gedrückt wird,
+// wird die meineApp.post 'profile' abgearbeitet  
 
+meineApp.post('/profil',(browserAnfrage, serverAntwort, next) => { 
+
+   // Der Wert der Eigenschaft von Mail in Browser wird
+   // zugewiesen an die Eigenschaft Mail des Objekts kunde 
+
+    kunde.Mail = browserAnfrage.body.Mail
+    kunde.Telefon= browserAnfrage.body.Telefon
+    kunde.Kennwort = browserAnfrage.body.Kennwort
+    
+    console.log("Profil gespeichert: Mail:" + kunde.Mail) 
+
+    serverAntwort.render('profil.ejs', {
+        Vorname: kunde.Vorname,
+        Nachname: kunde.Nachname,
+        Telefon: kunde.Telefon,
+        Mail: kunde.Mail,
+        Password: kunde.Kennwort 
+    })  
 }) 
 
 // require('./Uebungen/ifUndElse.js')
