@@ -158,7 +158,6 @@ meineApp.post('/profil',(browserAnfrage, serverAntwort, next) => {
     kunde.Telefon= browserAnfrage.body.Telefon
     kunde.Kennwort = browserAnfrage.body.Kennwort
     
-    console.log("Profil gespeichert: Mail:" + kunde.Mail) 
 
     serverAntwort.render('profil.ejs', {
         Vorname: kunde.Vorname,
