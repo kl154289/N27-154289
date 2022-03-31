@@ -142,21 +142,44 @@ meineApp.get('/profil',(browserAnfrage, serverAntwort, next) => {
         Nachname: kunde.Nachname,
         Telefon: kunde.Telefon,
         Mail: kunde.Mail,
-        Password: kunde.Kennwort 
+        Password: kunde.Kennwort,
+        Erfolgsmeldung: ""
     }) 
 }) 
 
 // Sobald der Speicher butten auf der Profilseite gedrückt wird,
 // wird die meineApp.post 'profile' abgearbeitet  
 
-meineApp.post('/profil',(browserAnfrage, serverAntwort, next) => { 
+meineApp.post('/profil',(browserAnfrage, serverAntwort, next) => {
+    
+    // Die erfolgsmeldung für das Speichern der geänderete 
+    // der Profilsdaten wird in einer lokalen Variable namens 
+    // Erfolgsmeldung gespeichert 
+
+    let erfolgsmeldung = ""
 
    // Der Wert der Eigenschaft von Mail in Browser wird
    // zugewiesen an die Eigenschaft Mail des Objekts kunde 
 
-    kunde.Mail = browserAnfrage.body.Mail
-    kunde.Telefon= browserAnfrage.body.Telefon
-    kunde.Kennwort = browserAnfrage.body.Kennwort
+    if(kunde.Mail != browserAnfrage.body.Mail){
+        // wenn der Wert der Eigenschaft von kunde.Mail abweicht 
+        // von Wert der Eigenschaft Mail aus dem Browserformular 
+        // dann wird die Erfolgsmeldung initialisiert 
+        erfolgsmeldung = erfolgsmeldung + "Änderung der Mail erfolgreich."
+        kunde.Mail = browserAnfrage.body.Mail
+        console.log(erfolgsmeldung) 
+    }
+    if(kunde.Telefon != browserAnfrage.body.Telefon){
+       erfolgsmeldung = erfolgsmeldung + "Änderung der Telefonnummer erfolgreich."
+       kunde.Telefon= browserAnfrage.body.Telefon
+       console.log(erfolgsmeldung) 
+    }
+    if(kunde.Kennwort != browserAnfrage.body.Kennwort){
+        erfolgsmeldung = erfolgsmeldung + "Änderung des Passworts erfolgreich."
+        kunde.Kennwort = browserAnfrage.body.Kennwort
+    }
+    
+    
     
 
     serverAntwort.render('profil.ejs', {
@@ -164,10 +187,13 @@ meineApp.post('/profil',(browserAnfrage, serverAntwort, next) => {
         Nachname: kunde.Nachname,
         Telefon: kunde.Telefon,
         Mail: kunde.Mail,
-        Password: kunde.Kennwort 
+        Password: kunde.Kennwort,
+        Erfolgsmeldung: erfolgsmeldung
     })  
 }) 
 
 // require('./Uebungen/ifUndElse.js')
 // require('./Uebungen/klasseUndObjekt.js')
 
+
+// onclick="alert('Änderungen gespeicher')" 

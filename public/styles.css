@@ -98,6 +98,7 @@ label1 {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 2vh;  
   color: red;
+  text-align:center;
   
 }
 .meldung1 {
@@ -112,6 +113,18 @@ label1 {
   border-radius: 3px;
   box-sizing: border-box;
   } 
+
+  .meldung2 {
+    width: 80%;
+    margin-bottom: 10px;
+    margin-right: 10%;
+    margin-left: 10%;  
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 2vh;  
+    color: #4CAF50;
+    text-align:center;
+    
+  }
 
 
 .divii {
