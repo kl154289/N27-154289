@@ -7,12 +7,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <title>N27</title>
+    <title>N27 - Über uns</title>
 </head>
 <body>
     <div class="rahmen">
         <div class="kopf">
-            <h1>Willkommen bei der N27</h1>            
+            <h1>N27 - Über uns</h1>            
         </div>
         <div class="navigationsleiste">
             <div class="tooltip">
@@ -31,7 +31,6 @@
                 <span class="tooltiptext">Konto</span>
             </div>
             
-            
              - 
              <div class="tooltip">
                 <a href="/support"><i class="fa fa-question-circle fa-2x" aria-hidden="true"></i> </a> 
@@ -44,7 +43,22 @@
                 <span class="tooltiptext">Ausloggen</span>
             </div>   
         </div>
-        <div class="inhaltsbereich"></div>
+        
+        <div class="inhaltsbereich">
+            <form method="post">
+                <label1 for="fname">Vorname:</label><br>
+                <input class="meldung1" readonly value=<%= VornameBerater %> > <br>
+                <label1 for="lname">Nachname:</label><br>
+                <input class="meldung1" readonly value=<%= NachnameBerater %> > <br> 
+                <label1 for="lname"> Email:</label><br>
+                <input type="email" name="Mail" class="meldung1" readonly value=<%= MailBerater %>> <br> 
+                <label1 for="lname"> Telefon:</label><br>
+                <input type="tel" name="Telefon" class="meldung1" readonly value=<%= TelefonBerater %>> <br>
+                <label1 for="lname"> Filiale:</label><br>
+                <input class="meldung1" name="Filiale" readonly value=<%= FilialeBerater %>> <br>
+            </form>
+
+        </div>
         <div class="fusszeile">
             &copy; 2022 GW21A
         </div>

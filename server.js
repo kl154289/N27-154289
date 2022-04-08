@@ -17,6 +17,16 @@ class Kunde{
         this.Telefon
     }
 }
+class Berater{
+    constructor(){
+        this.IdBerater
+        this.Nachname
+        this.Vorname
+        this.Mail 
+        this.Telefon
+        this.Filiale 
+    }
+}
 
 // Von der Kunden-Klasse wird eine konkrete Instanz 
 // gebildet. 
@@ -33,6 +43,15 @@ kunde.Geburtsdatum = "12.1.2000"
 kunde.Mail = "Hanz@gmail.com"
 kunde.Kennwort = "123"
 kunde.Telefon = 123456789
+
+let berater = new Berater
+
+berater.IdBerater = 100001
+berater.Nachname = "Harry"
+berater.Vorname = "Berater"
+berater.Mail = "ichHelfe@gmail.com"
+berater.Telefon = 123456789
+berater.Filiale = "Borken"
 
 
 
@@ -70,7 +89,7 @@ meineApp.get('/',(browserAnfrage, serverAntwort, next) => {
     // Login-Seite an den Browser gegeben werden.
 
         serverAntwort.render('login.ejs', {
-            meldung : ""
+            Meldung : ""
         })  
     }        
 })
@@ -108,11 +127,11 @@ meineApp.post('/login',(browserAnfrage, serverAntwort, next) => {
     }else{
         // Wenn sie nicht übereinstimmen wird die Login-Seite geladen. 
     serverAntwort.render('login.ejs', {
-        meldung : "Ihre Zugangsdaten sind falsch."
+        Meldung : "Ihre Zugangsdaten sind falsch."
     })  
     }
     serverAntwort.render('login.ejs', {
-        meldung : "Bitte geben sie ihere Zugangsdaten ein. "
+        Meldung : "Bitte geben sie ihere Zugangsdaten ein. "
     })         
         
 })
@@ -128,23 +147,74 @@ meineApp.get('/login',(browserAnfrage, serverAntwort, next) => {
     // Browser zurückgegeben:
 
     serverAntwort.render('login.ejs', {
-        meldung : "Bitte geben sie ihere Zugangsdaten ein."
+        Meldung : "Bitte geben sie ihere Zugangsdaten ein."
     })          
 })
-// Die meineApp.post('login')wird ausgeführt sobald der Butten auf dem loginformular gedrückt wird.
-meineApp.get('/about',(browserAnfrage, serverAntwort, next) => {              
-    serverAntwort.render('about.ejs', {})          
+// wenn die about Seite angesurft wird, wird die about-Seite
+// zum Browser zurückgegeben 
+meineApp.get('/about',(browserAnfrage, serverAntwort, next) => { 
+
+    // wenn der Anmelde Cooki gesätzt ist, wird der Nutzer zur 
+    // about-Seite gelänkt.
+
+    if(browserAnfrage.signedCookies['istAngemeldetAls']){
+        serverAntwort.render('about.ejs')
+    }else{
+
+    // Wenn der Kunde nichtbereits angemeldet ist, soll die 
+    // Login-Seite an den Browser gegeben werden.
+
+        serverAntwort.render('login.ejs', {
+            Meldung : ""
+        })  
+    }             
+             
 }) 
 
-meineApp.get('/profil',(browserAnfrage, serverAntwort, next) => {              
-    serverAntwort.render('profil.ejs', {
-        Vorname: kunde.Vorname,
-        Nachname: kunde.Nachname,
-        Telefon: kunde.Telefon,
-        Mail: kunde.Mail,
-        Password: kunde.Kennwort,
-        Erfolgsmeldung: ""
-    }) 
+meineApp.get('/profil',(browserAnfrage, serverAntwort, next) => {
+    if(browserAnfrage.signedCookies['istAngemeldetAls']){
+        serverAntwort.render('profil.ejs', {
+            Vorname: kunde.Vorname,
+            Nachname: kunde.Nachname,
+            Telefon: kunde.Telefon,
+            Mail: kunde.Mail,
+            Password: kunde.Kennwort,
+            Erfolgsmeldung: ""
+        })
+    }else{
+
+    // Wenn der Kunde nichtbereits angemeldet ist, soll die 
+    // Login-Seite an den Browser gegeben werden.
+
+        serverAntwort.render('login.ejs', {
+            Meldung : ""
+        })  
+    }                
+    
+}) 
+
+meineApp.get('/support',(browserAnfrage, serverAntwort, next) => {
+    if(browserAnfrage.signedCookies['istAngemeldetAls']){
+        serverAntwort.render('support.ejs', {
+            VornameBerater: berater.Vorname,
+            NachnameBerater: berater.Nachname,
+            TelefonBerater: berater.Telefon,
+            MailBerater: berater.Mail,
+            FilialeBerater: berater.Filiale,
+            ErfolgsmeldungBerater: ""
+        })
+
+    }else{
+
+    // Wenn der Kunde nichtbereits angemeldet ist, soll die 
+    // Login-Seite an den Browser gegeben werden.
+
+        serverAntwort.render('login.ejs', {
+            Meldung : ""
+        })  
+    } 
+            
+    
 }) 
 
 // Sobald der Speicher butten auf der Profilseite gedrückt wird,

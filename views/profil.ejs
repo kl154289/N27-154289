@@ -29,7 +29,7 @@
           <div class="tooltip">
           <a href="/"><i class="fa fa-home fa-2x" aria-hidden="true"></i> </a> 
           <span class="tooltiptext">Home</span>
-        </div>
+      </div>
            -
           <div class="tooltip">
               <a href="/about"><i class="fa fa-info fa-2x" aria-hidden="true"></i> </a> 
@@ -37,13 +37,20 @@
           </div>
           
            - 
-          <div class="tooltip">
+           <div class="tooltip">
               <a href="/profil"><i class="fa fa-user-circle-o fa-2x" aria-hidden="true"></i></a>
               <span class="tooltiptext">Konto</span>
           </div>
           
+          
            - 
-          <div class="tooltip">
+           <div class="tooltip">
+              <a href="/support"><i class="fa fa-question-circle fa-2x" aria-hidden="true"></i> </a> 
+              <span class="tooltiptext">Support</span>
+          </div>
+
+          -
+           <div class="tooltip">
               <a href="/login"><i class="fa fa-sign-out fa-2x"></i></a>
               <span class="tooltiptext">Ausloggen</span>
           </div>   
@@ -52,15 +59,15 @@
             
             <form method="post">
                 <label1 for="fname">Vorname:</label><br>
-                <input class="meldung1" readonly value=<%= Vorname %> <br><br>
+                <input class="meldung1" readonly value=<%= Vorname %> > <br>
                 <label1 for="lname">Nachname:</label><br>
-                <input class="meldung1" readonly value=<%= Nachname %> <br><br> 
+                <input class="meldung1" readonly value=<%= Nachname %>> <br> 
                 <label1 for="lname"> Email:</label><br>
-                <input type="email" name="Mail" class="meldung1" value=<%= Mail %> <br><br> 
+                <input type="email" name="Mail" class="meldung1" value=<%= Mail %> > <br> 
                 <label1 for="lname"> Telefon:</label><br>
-                <input type="tel" name="Telefon" class="meldung1" value=<%= Telefon %> <br><br>
+                <input type="tel" name="Telefon" class="meldung1" value=<%= Telefon %>> <br>
                 <label1 for="lname"> Passwort:</label><br>
-                <input type="password" name="Kennwort" id="myInput" class="meldung1" value=<%= Password %> <br><br>
+                <input type="password" name="Kennwort" id="myInput" class="meldung1" value=<%= Password %>> <br>
                 <input type="checkbox" title="Passwort anzeigen" name="checkbox1" id="checkbox1" onclick="myFunction()">
                 <label1 for="checkbox1"></label1><br>
                 <button class="save" formaction="/profil" ><i class="fa fa-floppy-o" aria-hidden="true"></i> Speichern</button>
