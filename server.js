@@ -25,6 +25,8 @@ class Berater{
         this.Mail 
         this.Telefon
         this.Filiale 
+        this.Bergruessung
+        this.Position 
     }
 }
 
@@ -49,9 +51,11 @@ let berater = new Berater
 berater.IdBerater = 100001
 berater.Nachname = "Harry"
 berater.Vorname = "Berater"
-berater.Mail = "ichHelfe@gmail.com"
+berater.Mail = "IchHelfe@gmail.com"
 berater.Telefon = 123456789
 berater.Filiale = "Borken"
+berater.Bergruessung = "Hallo hau ab das Geld ist nicht echt!"
+berater.Position = "Chef"
 
 
 
@@ -201,6 +205,8 @@ meineApp.get('/support',(browserAnfrage, serverAntwort, next) => {
             TelefonBerater: berater.Telefon,
             MailBerater: berater.Mail,
             FilialeBerater: berater.Filiale,
+            Bergruessung: berater.Bergruessung,
+            Position: berater.Position,
             ErfolgsmeldungBerater: ""
         })
 
