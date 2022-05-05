@@ -29,6 +29,14 @@ class Berater{
         this.Position 
     }
 }
+class Konto {
+    constructor(){
+        this.Kontostand
+        this.IBAN
+        this.Art 
+        this.PIN 
+    }
+}
 
 // Von der Kunden-Klasse wird eine konkrete Instanz 
 // gebildet. 
@@ -56,6 +64,13 @@ berater.Telefon = 123456789
 berater.Filiale = "Borken"
 berater.Bergruessung = "Hallo hau ab das Geld ist nicht echt!"
 berater.Position = "Chef"
+
+let konto = new Konto
+
+konto.Kontostand = 10
+konto.IBAN = "De12 4011 1111 0022 8888 16"
+konto.Art = "Girokonto"
+konto.PIN = 1234
 
 
 
@@ -267,6 +282,24 @@ meineApp.post('/profil',(browserAnfrage, serverAntwort, next) => {
         Erfolgsmeldung: erfolgsmeldung
     })  
 }) 
+
+meineApp.get('/kontostandAnzeigen',(browserAnfrage, serverAntwort, next) => {
+    if(browserAnfrage.signedCookies['istAngemeldetAls']){
+        serverAntwort.render('kontostandAnzeigen.ejs', {
+       
+        })
+
+    }else{
+
+    
+        serverAntwort.render('login.ejs', {
+            Meldung : ""
+        })  
+    } 
+            
+    
+}) 
+
 
 // require('./Uebungen/ifUndElse.js')
 // require('./Uebungen/klasseUndObjekt.js')
