@@ -65,12 +65,17 @@ berater.Filiale = "Borken"
 berater.Bergruessung = "Hallo hau ab das Geld ist nicht echt!"
 berater.Position = "Chef"
 
+// Instanzierung eines Obejkts namens konto vom Typ Konto
+
 let konto = new Konto
+
+//Initialisierung 
 
 konto.Kontostand = 10
 konto.IBAN = "De12 4011 1111 0022 8888 16"
 konto.Art = "Girokonto"
 konto.PIN = 1234
+
 
 
 
@@ -301,8 +306,8 @@ meineApp.get('/kontostandAnzeigen',(browserAnfrage, serverAntwort, next) => {
 }) 
 
 
-// require('./Uebungen/ifUndElse.js')
-// require('./Uebungen/klasseUndObjekt.js')
+require('./Uebungen/ifUndElse.js')
+require('./Uebungen/klasseUndObjekt.js')
 
 
 // onclick="alert('Änderungen gespeicher')" 
