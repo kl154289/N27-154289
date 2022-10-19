@@ -11,7 +11,8 @@ console.log("Übung 1 - Prüfung auf Gleichheit:")
 // JAVASCRIPT
 
 let a1 = 1  // eine Variable (z.b A1 oder zahl 1) wirt mit dem Wert 1 initialisiert 
-let b1 = 1  // eine Variable (z.b B1 oder zahl 2) wirt mit dem Wert 2 initialisiert 
+let b1 = 1
+// eine Variable (z.b B1 oder zahl 2) wirt mit dem Wert 2 initialisiert 
 
 if(a1 == b1){
     console.log("a1 und b1 sind gleich")
