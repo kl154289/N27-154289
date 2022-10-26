@@ -3,7 +3,7 @@
 1. Fragen zu Datenschutz und / 
 oder Datensicherheit 
 
-2. If & Else, auch verschachtelt Siehe dazu auch die alte Klausur und #
+2. If & Else, auch verschachtelt Siehe dazu auch die alte Klausur und
 die ifUndElse.js
 
 3. Für ein Objekt müssen relevante Eigenschaften 
