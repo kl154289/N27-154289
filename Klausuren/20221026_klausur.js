@@ -188,3 +188,4 @@ if(pitdurchnitt2 == gitdurchnitt){
         console.log("Git hat das viel bessere Zeugnis")
         }
     
+//test
