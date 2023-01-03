@@ -1,4 +1,124 @@
-// Programme veraarbeiten oft Objekte der realen Welt.
+// Das installierte MsYQL-Module mit require() eingebunden 
+// Das MySQL-Module stellt die verbindung stellt die verbindung zwischen der App un der 
+// MySQL-Datenbank her. 
+// Eine Datenbank wird benötigt, wenn Daten auch nach der Laufzeit des
+// Programms noch weiter existieren sollen.
+// Außerdem ermöglicht die Datenbank, dass z.B. Geldüberweisungen 
+// zwischen Anwendern möglich werden.
+
+var mysql = require('mysql');
+var IBAN = require('iban'); 
+
+// Die Verbindung zur Datenbank eird hergestellt. Dazu werden die 
+// Adresse und die Anmeldedataen der Datenbank angegeben.
+
+var dbVerbindung = mysql.createConnection({
+    host: "10.40.38.110",
+    user: "placematman",
+    password: "BKB123456!",
+    database: "dbn27" 
+  });
+  
+  dbVerbindung.connect(function(err) {
+
+    // Wenn dei Verbindung scheitert, wird ein Fehler geworfen.
+
+    if (err) throw err;
+
+    // Wenn die Verbindung aufgebaut werden kann, wird der Erfolg
+    // auf der Console geloggt.
+
+    console.log("Connected!");
+  });
+
+  // Die Verbindung zur Datenbank wird geöffnet.
+
+  dbVerbindung.connect(function(fehler){
+
+    // Die Tabelle namens kunde wird erstellt.
+    // Die Spalten heißen: idKunde, vorname, nachname, ort, kennwort, mail 
+    // VARCHAR(45) legt den Datentyp der Spalte auf "Text" mit der länge max.45 fest
+    // INT(11) begrenzt die Eingabe auf 11 Ziffern.
+    // idKunde ist Primary Key. Das bedeutet, dass die idKunde den Datensatz eindeutig 
+    // kennzeichnet.
+
+    dbVerbindung.query('CREATE TABLE kunde(idKunde INT(11), vorname VARCHAR(45), nachname VARCHAR(45), ort VARCHAR(45), kennwort VARCHAR(45), mail VARCHAR(45), PRIMARY KEY(idKunde));', function (fehler) {
+        // Falls ein Problem beim der Query aufommt,...
+    if (fehler) {
+        // ... und der Fehlercode "ER_TABLE_EXISTS_ERROR" lautet, ...
+             if(fehler.code == "ER_TABLE_EXISTS_ERROR"){
+
+        // ... dann wird eine Fehlermeldung geloggt. 
+
+            console.log("Tabelle kunde existiert bereits und wird nicht angelegt.")
+     }else{
+         console.log("Fehler: " + fehler )
+         }
+        }else{
+         console.log("Tabelle Kunde erfolgreich angelegt.")
+    }
+    })
+    })
+
+
+    dbVerbindung.query('CREATE TABLE kredit(Zinssatz INT(11), Kreditbetrag INT(11), Laufzeit VARCHAR(45), PRIMARY KEY(Zinssatz));', function (fehler) {
+        // Falls ein Problem beim der Query aufommt,...
+    if (fehler) {
+        // ... und der Fehlercode "ER_TABLE_EXISTS_ERROR" lautet, ...
+             if(fehler.code == "ER_TABLE_EXISTS_ERROR"){
+
+        // ... dann wird eine Fehlermeldung geloggt. 
+
+            console.log("Tabelle kredit existiert bereits und wird nicht angelegt.")
+     }else{
+         console.log("Fehler: " + fehler )
+         }
+        }else{
+         console.log("Tabelle kredit erfolgreich angelegt.")
+    }
+    }); 
+
+    dbVerbindung.query('CREATE TABLE konto( Kontostand INT(11), Kontoart INT(11), PIN INT(4) PRIMARY KEY(IBAN));', function (fehler) {
+        // Falls ein Problem beim der Query aufommt,...
+        
+    if (fehler) {
+        // ... und der Fehlercode "ER_TABLE_EXISTS_ERROR" lautet, ...
+             if(fehler.code == "ER_TABLE_EXISTS_ERROR"){
+
+        // ... dann wird eine Fehlermeldung geloggt. 
+
+            console.log("Tabelle kredit existiert bereits und wird nicht angelegt.")
+     }else{
+         console.log("Fehler: " + fehler )
+         }
+        }else{
+         console.log("Tabelle kredit erfolgreich angelegt.")
+    }
+    }); 
+
+    dbVerbindung.query('INSERT INTO kunde(idKunde, vorname, nachname, ort, kennwort, mail) VALUES (150000, "Pit", "Kiff", "BOR", "123!", "pk@web.de") ;', function (fehler) {
+      
+        // Falls ein Problem bei der Query aufkommt, ...
+        
+        if (fehler) {
+        
+            // ... und der Fehlercode "ER_TABLE_EXISTS_ERROR" lautet, ...
+    
+            if(fehler.code == "ER_TABLE_EXISTS_ERROR"){
+    
+                //... dann wird eine Fehlermdldung geloggt. 
+    
+                console.log("Tabelle kredit existiert bereits und wird nicht angelegt.")
+            
+            }else{
+                console.log("Fehler: " + fehler )
+            }
+        }else{
+                console.log("Tabelle kredit erfolgreich angelegt.")
+         }
+    });
+    
+// Programme verarbeiten oft Objekte der realen Welt.
 // Objekte haben Eigenschaften.
 // In unserem Bankingprogramm intressieren uns Objekte,
 // wie z.B. Kunde, Konten...
@@ -42,7 +162,7 @@ class Konto {
 
         this.Kontostand
         this.IBAN
-        this.Art 
+        this.Kontoart  
         this.PIN 
     }
 }
@@ -106,7 +226,7 @@ let konto = new Konto
 
 konto.Kontostand = 10
 konto.IBAN = "DE12401111110022888816"
-konto.Art = "Giro"
+konto.Kontoart = "Giro"
 konto.PIN = 1234
 
 let kredit = new Kredit
@@ -332,7 +452,7 @@ meineApp.get('/kontostandAnzeigen',(browserAnfrage, serverAntwort, next) => {
         serverAntwort.render('kontostandAnzeigen.ejs', {
            Kontostand: konto.Kontostand,
            IBAN: konto.IBAN,
-           Kontoart: konto.Art, 
+           Kontoart: konto.Kontoart, 
            PIN: konto.PIN 
         })
 
@@ -351,7 +471,8 @@ meineApp.get('/kreditrechner',(browserAnfrage, serverAntwort, next) => {
         serverAntwort.render('kreditrechner.ejs', {
        Kreditbetrag: kredit.Kreditbetrag,
        Zinssatz: kredit.Zinssatz,
-       Laufzeit: kredit.Laufzeit
+       Laufzeit: kredit.Laufzeit,
+       Erfolgsmeldung: "" 
         })
 
     }else{
@@ -383,10 +504,43 @@ meineApp.post('/kreditrechner',(browserAnfrage, serverAntwort, next) => {
             
     
 }) 
+meineApp.get('/kontoAnlegen',(browserAnfrage, serverAntwort, next) => {
+    if(browserAnfrage.signedCookies['istAngemeldetAls']){
+        serverAntwort.render('kontoAnlegen.ejs', {
+       
+        })
 
+    }else{
+
+    
+        serverAntwort.render('login.ejs', {
+            Meldung : ""
+        })  
+    } 
+            
+    
+}) 
+
+meineApp.post('/kontoAnlegen',(browserAnfrage, serverAntwort, next) => {
+    if(browserAnfrage.signedCookies['istAngemeldetAls']){
+        serverAntwort.render('kontoAnlegen.ejs', {
+       
+        })
+
+    }else{
+
+    
+        serverAntwort.render('login.ejs', {
+            Meldung : ""
+        })  
+    } 
+            
+    
+}) 
 
 //require('./Uebungen/ifUndElse.js')
 //require('./Uebungen/klasseUndObjekt.js')
 //require('./Klausuren/20220531_klausur.js')
-require('./Klausuren/20221026_klausur.js')
+//require('./Klausuren/20221026_klausur.js')
+//require('./Klausuren/20230111_klausur.js')
 // onclick="alert('Änderungen gespeicher')" 
