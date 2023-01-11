@@ -1,3 +1,9 @@
+var IBAN = require('iban');
+IBAN.isValid('hello world'); // false
+IBAN.isValid('BE68539007547034'); // true
+
+
+
 // Das installierte MsYQL-Module mit require() eingebunden 
 // Das MySQL-Module stellt die verbindung stellt die verbindung zwischen der App un der 
 // MySQL-Datenbank her. 
@@ -209,6 +215,8 @@ berater.Telefon = 123456789
 berater.Filiale = "Borken"
 berater.Bergruessung = "Hallo hau ab das Geld ist nicht echt!"
 berater.Position = "Chef"
+
+
 
 // Instanzierung eines Obejkts namens konto vom Typ Konto
 // "let konto" bedeutet, dass ei Objekt namens konto exisitieren soll. 
@@ -507,8 +515,8 @@ meineApp.post('/kreditrechner',(browserAnfrage, serverAntwort, next) => {
 meineApp.get('/kontoAnlegen',(browserAnfrage, serverAntwort, next) => {
     if(browserAnfrage.signedCookies['istAngemeldetAls']){
         serverAntwort.render('kontoAnlegen.ejs', {
-       
-        })
+            IBAN: 6,
+    })
 
     }else{
 
@@ -524,7 +532,8 @@ meineApp.get('/kontoAnlegen',(browserAnfrage, serverAntwort, next) => {
 meineApp.post('/kontoAnlegen',(browserAnfrage, serverAntwort, next) => {
     if(browserAnfrage.signedCookies['istAngemeldetAls']){
         serverAntwort.render('kontoAnlegen.ejs', {
-       
+          IBAN: 6,
+
         })
 
     }else{
