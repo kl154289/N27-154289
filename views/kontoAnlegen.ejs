@@ -12,7 +12,7 @@
 <body>
     <div class="rahmen">
         <div class="kopf">
-            <h1>Willkommen bei der N27</h1>            
+            <h1>Konto anlegen</h1>            
         </div>
         <div class="navigationsleiste">
             <div class="tooltip">
@@ -45,20 +45,19 @@
             </div>   
         </div>
         <div class="inhaltsbereich">
+        <form method="post">
             <label1  for="Kontoart">Kontoart wählen:</label> <br>
             <select class="meldung1" id="kontoart" name="kontoart">
               <option value="Girokonto">Girokonto</option>
               <option value="Sparkonto">Sparkonto</option>
             </select>
-            
-            <label1 for="fname">IBAN:</label><br>
-                <input class="meldung1" readonly value=<%=IBAN %> > <br>
-            
+        
+        
             
             <form>
-                <button class="save" formaction="/"><i class="fa fa-book" aria-hidden="true"></i> Konto erstellen </button>
+                <button class="save" formaction="/kontoAnlegen"><i class="fa fa-book" aria-hidden="true"></i> Konto erstellen </button>
             </form>
-
+        </form>
         
         </div>
         <div class="fusszeile">

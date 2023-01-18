@@ -521,12 +521,18 @@ meineApp.post('/kreditrechner',(browserAnfrage, serverAntwort, next) => {
             
     
 }) 
+
+// Die Funktion meineApp.get('/kontoAnlegen'...wird abgearbeitet sobald die Seite
+// kontoAnlegen im Browser aufgerufen wird) 
 meineApp.get('/kontoAnlegen',(browserAnfrage, serverAntwort, next) => {
+
+// Es wird geprüft, ob der User angemeldet ist, also ob der Cookie gesetzt ist.  
     if(browserAnfrage.signedCookies['istAngemeldetAls']){
+//Wenn der User angemeldet ist, wird die Konto anlegen gerendert.
         serverAntwort.render('kontoAnlegen.ejs', {
             IBAN: 6,
     })
-
+//Wenn der User nicht angemeldet ist, wird er zum Login zurückgeworfen.
     }else{
 
     
@@ -538,23 +544,46 @@ meineApp.get('/kontoAnlegen',(browserAnfrage, serverAntwort, next) => {
     
 }) 
 
-meineApp.post('/kontoAnlegen',(browserAnfrage, serverAntwort, next) => {
-    if(browserAnfrage.signedCookies['istAngemeldetAls']){
-        serverAntwort.render('kontoAnlegen.ejs', {
-          IBAN: 6,
+//Die Funktion meineApp.post ('/kontoAnlegen'....wird abgearbeitet, sobald ein Butoon auf der kontoanlegenSeite gedrückt wird)
 
-        })
+meineApp.post('/kontoAnlegen',(browserAnfrage, serverAntwort, next) => {   
+    
+    // Die im Browser eingegebene IdKunde und Kennwort werden zugewiesen
+    // an die Konstante namens idKunde und kennwort.
 
+    const kontoart = browserAnfrage.body.kontoart
+
+    
+    console.log("Konto: " + kontoart +" wurde ausgewaelt.") 
+
+    // Die Identität des Kunden wird überprüft. 
+    // if and javascript 
+    
+    if(idKunde == kunde.IdKunde && kennwort == kunde.Kennwort){
+
+        // Ein Cookie namens 'istAngemeldetAls' wird beim Browser gesetzt.#
+        // Der Wert des Cookies ist das in eine Zeichenkette umgewandelte Kunden-Objekt.
+        // Der Cookie wird signiert, also gegen Manpulation geschützt. 
+
+        serverAntwort.cookie('istAngemeldetAls',JSON.stringify(kunde),{signed:true})
+        console.log("Der Cookie wurde erfolgreich gesetzt")
+
+        // Wenn die Id des Kunden mit der Eingabe im Browser übereinstimmt
+        // Und("&&") das Kennwort ebenfalls 
+        // dann gibt der SErver die gerenderte Index-Seite zurück.
+        serverAntwort.render('index.ejs', {})          
     }else{
+        // Wenn sie nicht übereinstimmen wird die Login-Seite geladen. 
+    serverAntwort.render('login.ejs', {
+        Meldung : "Ihre Zugangsdaten sind falsch."
+    })  
+    }
+    serverAntwort.render('login.ejs', {
+        Meldung : "Bitte geben sie ihere Zugangsdaten ein. "
+    })         
+        
+})
 
-    
-        serverAntwort.render('login.ejs', {
-            Meldung : ""
-        })  
-    } 
-            
-    
-}) 
 
 //require('./Uebungen/ifUndElse.js')
 //require('./Uebungen/klasseUndObjekt.js')
