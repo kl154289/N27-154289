@@ -67,22 +67,31 @@ var dbVerbindung = mysql.createConnection({
     })
 
 
-    dbVerbindung.query('CREATE TABLE kredit(Zinssatz INT(11), Kreditbetrag INT(11), Laufzeit VARCHAR(45), PRIMARY KEY(Zinssatz));', function (fehler) {
-        // Falls ein Problem beim der Query aufommt,...
-    if (fehler) {
-        // ... und der Fehlercode "ER_TABLE_EXISTS_ERROR" lautet, ...
-             if(fehler.code == "ER_TABLE_EXISTS_ERROR"){
-
-        // ... dann wird eine Fehlermeldung geloggt. 
-
-            console.log("Tabelle kredit existiert bereits und wird nicht angelegt.")
-     }else{
-         console.log("Fehler: " + fehler )
-         }
+    dbVerbindung.query('CREATE TABLE kredit(idKunde INT(11), datum DATETIME, zinssatz FLOAT, laufzeit INT(11), betrag SMALLINT, PRIMARY KEY(idKunde,datum));', function (fehler) {
+      
+        // Falls ein Problem bei der Query aufkommt, ...
+        
+        if (fehler) {
+        
+            // ... und der Fehlercode "ER_TABLE_EXISTS_ERROR" lautet, ...
+    
+            if(fehler.code == "ER_TABLE_EXISTS_ERROR"){
+    
+                //... dann wird eine Fehlermdldung geloggt. 
+    
+                console.log("Tabelle kredit existiert bereits und wird nicht angelegt.")
+            
+            }else{
+                console.log("Fehler: " + fehler )
+            }
         }else{
-         console.log("Tabelle kredit erfolgreich angelegt.")
-    }
-    }); 
+                console.log("Tabelle kredit erfolgreich angelegt.")
+         }
+      })
+
+  
+  // Ein Kunde soll neu in der Datenbank angelegt werden.
+  
 
     dbVerbindung.query('CREATE TABLE konto( Kontostand INT(11), Kontoart INT(11), PIN INT(4) PRIMARY KEY(IBAN));', function (fehler) {
         // Falls ein Problem beim der Query aufommt,...
