@@ -20,15 +20,27 @@ var IBAN = require('iban');
 // Adresse und die Anmeldedataen der Datenbank angegeben.
 
 var dbVerbindung = mysql.createConnection({
+
+    // Der Host ist der Server auf dem die Datenbank installiert ist. 
+    // Der Host kann über seinen Namen oder seine IP-Adresse adressiert werden.
+    // wenn der Host nicht reagiert kann mit ping 10.40.38.110 geprüft werden ob der Rechner eingeschaltet ist. 
+    // Wenn der Rechner auf ping antwortet, aber kein connect aufgebaut werden kann,
+    //  dann muss geprüft werden, ob der Datenbank-Dienst auf dem Rechener läuft. 
+    // Dazu melden wir uns auf den Datenbanksecer an und starten die MySQL-Workbanch. 
     host: "10.40.38.110",
     user: "placematman",
     password: "BKB123456!",
     database: "dbn27" 
   });
+
+  // Die dbVerbindung ruft die connect-Methode auf, um eine Verbindung mit der
+  // Datenbank herzustellen. 
   
   dbVerbindung.connect(function(err) {
 
     // Wenn dei Verbindung scheitert, wird ein Fehler geworfen.
+    // Wenn die Datenbank nicht innerhalb einer definierten Zeit auf 
+    // den connect-Versuch antwortet, kommt ein TIMEOUT-Fehler.
 
     if (err) throw err;
 
@@ -327,6 +339,9 @@ meineApp.post('/login',(browserAnfrage, serverAntwort, next) => {
         serverAntwort.cookie('istAngemeldetAls',JSON.stringify(kunde),{signed:true})
         console.log("Der Cookie wurde erfolgreich gesetzt")
 
+        // Nachdem der Kunde erfolgreich eingelockt ist, werden seine Konten aus der Datenbank eingelesen.
+
+        
         // Wenn die Id des Kunden mit der Eingabe im Browser übereinstimmt
         // Und("&&") das Kennwort ebenfalls 
         // dann gibt der SErver die gerenderte Index-Seite zurück.
@@ -470,17 +485,36 @@ meineApp.post('/profil',(browserAnfrage, serverAntwort, next) => {
         Erfolgsmeldung: erfolgsmeldung
     })  
 }) 
-// sobald der "Button Kontostand anzeigen" auf der Index-Seite gedrückt wird,
-// wird die meineApp.get ('/kontosatdAnzeigen'- Funktion abgearbeitet) 
+
 
 meineApp.get('/kontostandAnzeigen',(browserAnfrage, serverAntwort, next) => {
-    if(browserAnfrage.signedCookies['istAngemeldetAls']){
+if(browserAnfrage.signedCookies['istAngemeldetAls']){
+    console.log("Jetzt werden die Konten eingelesen") 
+        // In MY MYSQL werden Abfragen gegen die Datenbank wie folg formuliert:
+        // DER Abfragebefehl beginnt mit SELECT 
+        // Anschöießent wird die interressierte Spalte angegeben.
+        // Mehrere interessierende Spalten werden mit Komma getrentt angegeben.
+        // Wenn alle Spalten ausgewählt werden sollen, kann vereinfachend * angegeben werden.      
+        //  Beispiele: SELECT iban, anfangssaldo FROM...' oder 'SELECT * FROM....'      
+        // Mit FROM wird die Tabelle angegeben, aus der der Result eingelesen werden soll.      
+        // Mit WHERE wird zeilenwiese gefilert    
+    
+    dbVerbindung.query('SELECT iban FROM konto WHERE idKunde = 154289;', function (fehler, result) {
+      
+        console.log(result)
+        // sobald der "Button Kontostand anzeigen" auf der Index-Seite gedrückt wird,
+        // wird die meineApp.get ('/kontosatdAnzeigen'- Funktion abgearbeitet) 
         serverAntwort.render('kontostandAnzeigen.ejs', {
-           Kontostand: konto.Kontostand,
-           IBAN: konto.IBAN,
-           Kontoart: konto.Kontoart, 
-           PIN: konto.PIN 
-        })
+            MeineIbans: result, 
+            Kontostand: konto.Kontostand,
+            IBAN: konto.IBAN,
+            Kontoart: konto.Kontoart, 
+            PIN: konto.PIN 
+       
+     });
+   
+        
+})
 
     }else{
 
@@ -542,6 +576,7 @@ meineApp.get('/kontoAnlegen',(browserAnfrage, serverAntwort, next) => {
 //Wenn der User angemeldet ist, wird die Konto anlegen gerendert.
         serverAntwort.render('kontoAnlegen.ejs', {
             IBAN: 6,
+            Erfolgsmeldung: "",
     })
 //Wenn der User nicht angemeldet ist, wird er zum Login zurückgeworfen.
     }else{
@@ -558,6 +593,8 @@ meineApp.get('/kontoAnlegen',(browserAnfrage, serverAntwort, next) => {
 //Die Funktion meineApp.post ('/kontoAnlegen'....wird abgearbeitet, sobald der Butoon auf der kontoanlegenSeite gedrückt wird)
 //und das Formular abgesendet ('gepostet')wird. 
 meineApp.post('/kontoAnlegen',(browserAnfrage, serverAntwort, next) => {   
+
+    let erfolgsmeldung = ""
     
     // Die im Formulsr eingegebene wird an die Konstante namens kontoArt zugewiesen.
 
@@ -621,14 +658,18 @@ dbVerbindung.query('INSERT INTO konto(iban, idKunde, anfangssaldo, kontoart, tim
             
             }else{
                 console.log("Fehler: " + fehler )
+                erfolgsmeldung = "Fehler: " + fehler 
             }
             }else{
+                erfolgsmeldung = "Das " + kontoart + "mit der Iban "
                 console.log("Tabelle kredit erfolgreich angelegt.")
             }
+            // Nach dem Erstellen des Kontos wird die Serverantwort gerendert an den Browser zurückgegeben.
         });
-    
+            // Damit die Meldung auf ejs-Seite angezeigt wird, muss es auf der ejs-Seite eine Variable
+            // namens <%= Erfolgsmeldung &> geben.
          serverAntwort.render('kontoAnlegen.ejs', {
-        
+            Erfolgsmeldung: "Das " + kontoart + " mit der IBAN " + iban + " wurde erfolgreich angelegt."
     })              
         
 })
