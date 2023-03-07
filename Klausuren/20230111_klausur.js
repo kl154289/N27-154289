@@ -62,3 +62,4 @@ console.log("Kapitalwert nach " + laufzeit + " Jahren: " + kapitalwert)
 for(let i = 3; i > 0; i--){
     console.log("Countdown: " + i)
 }
+
