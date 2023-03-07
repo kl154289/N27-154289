@@ -1,6 +1,7 @@
+// Das IBAN-Modul wird benötigt um eine gültige IBAN zu errechen
+
 var IBAN = require('iban');
-IBAN.isValid('hello world'); // false
-IBAN.isValid('BE68539007547034'); // true
+
 
 
 
@@ -88,28 +89,34 @@ var dbVerbindung = mysql.createConnection({
                 console.log("Tabelle kredit erfolgreich angelegt.")
          }
       })
+      // Eine Tabelle namens Konto wird neu angelegt falls sie noch nicht existiert 
 
+      dbVerbindung.query('CREATE TABLE konto(iban VARCHA(45), idKunde INT(11), anfangssaldo FLOAT, kontoart VARCHA(45), timestamp TIMESTAMP, PRIMARY KEY(iban));', function (fehler) {
+      
+        // Falls ein Problem bei der Query aufkommt, ...
+        
+        if (fehler) {
+        
+            // ... und der Fehlercode "ER_TABLE_EXISTS_ERROR" lautet, ...
+    
+            if(fehler.code == "ER_TABLE_EXISTS_ERROR"){
+    
+                //... dann wird eine Fehlermdldung geloggt. 
+    
+                console.log("Tabelle kredit existiert bereits und wird nicht angelegt.")
+            
+            }else{
+                console.log("Fehler: " + fehler )
+            }
+        }else{
+                console.log("Tabelle kredit erfolgreich angelegt.")
+         }
+      })
   
   // Ein Kunde soll neu in der Datenbank angelegt werden.
   
 
-    dbVerbindung.query('CREATE TABLE konto( Kontostand INT(11), Kontoart INT(11), PIN INT(4) PRIMARY KEY(IBAN));', function (fehler) {
-        // Falls ein Problem beim der Query aufommt,...
-        
-    if (fehler) {
-        // ... und der Fehlercode "ER_TABLE_EXISTS_ERROR" lautet, ...
-             if(fehler.code == "ER_TABLE_EXISTS_ERROR"){
-
-        // ... dann wird eine Fehlermeldung geloggt. 
-
-            console.log("Tabelle kredit existiert bereits und wird nicht angelegt.")
-     }else{
-         console.log("Fehler: " + fehler )
-         }
-        }else{
-         console.log("Tabelle kredit erfolgreich angelegt.")
-    }
-    }); 
+    
 
     dbVerbindung.query('INSERT INTO kunde(idKunde, vorname, nachname, ort, kennwort, mail) VALUES (150000, "Pit", "Kiff", "BOR", "123!", "pk@web.de") ;', function (fehler) {
       
@@ -187,11 +194,13 @@ class Kredit {
         this.Zinssatz
         this.Kreditbetrag 
         this.Laufzeit
+        this.GesamtkostenKredit
+        this.kostenKredit
     }
 
     // eine Funktion berechnet etwas. Im Namen der Funktion steht also immer ein Verb.
     berechneGesamtkostenKredit(){
-        return this.Kreditbetrag * this.Zinssatz / 100 + this.Kreditbetrag
+        return  this.Kreditbetrag * this.Zinssatz / 100 + this.Kreditbetrag
     }
 
 }
@@ -251,7 +260,7 @@ let kredit = new Kredit
 kredit.Zinssatz = 1 
 kredit.Kreditbetrag = 100
 kredit.Laufzeit = 1
-
+kredit.GesamtkostenKredit = this.Kreditbetrag * this.Zinssatz / 100 + this.Kreditbetrag
 
 const express = require('express')
 const bodyParser = require('body-parser')
@@ -489,6 +498,7 @@ meineApp.get('/kreditrechner',(browserAnfrage, serverAntwort, next) => {
        Kreditbetrag: kredit.Kreditbetrag,
        Zinssatz: kredit.Zinssatz,
        Laufzeit: kredit.Laufzeit,
+       Ergebnis: kredit.GesamtkostenKredit, 
        Erfolgsmeldung: "" 
         })
 
@@ -508,7 +518,8 @@ meineApp.post('/kreditrechner',(browserAnfrage, serverAntwort, next) => {
         serverAntwort.render('kreditrechner.ejs', {
        Kreditbetrag: kredit.Kreditbetrag,
        Zinssatz: kredit.Zinssatz,
-       Laufzeit: kredit.Laufzeit
+       Laufzeit: kredit.Laufzeit,
+       Ergebnis: kredit.GesamtkostenKredit
         })
 
     }else{
@@ -544,43 +555,81 @@ meineApp.get('/kontoAnlegen',(browserAnfrage, serverAntwort, next) => {
     
 }) 
 
-//Die Funktion meineApp.post ('/kontoAnlegen'....wird abgearbeitet, sobald ein Butoon auf der kontoanlegenSeite gedrückt wird)
-
+//Die Funktion meineApp.post ('/kontoAnlegen'....wird abgearbeitet, sobald der Butoon auf der kontoanlegenSeite gedrückt wird)
+//und das Formular abgesendet ('gepostet')wird. 
 meineApp.post('/kontoAnlegen',(browserAnfrage, serverAntwort, next) => {   
     
-    // Die im Browser eingegebene IdKunde und Kennwort werden zugewiesen
-    // an die Konstante namens idKunde und kennwort.
+    // Die im Formulsr eingegebene wird an die Konstante namens kontoArt zugewiesen.
 
     const kontoart = browserAnfrage.body.kontoart
 
     
     console.log("Konto: " + kontoart +" wurde ausgewaelt.") 
 
-    // Die Identität des Kunden wird überprüft. 
-    // if and javascript 
+    // Die IBAN wird automatisch erzeugt. Die IBAN kennzeichnet das anzulegende Konto einmalig (Primary Key).
     
-    if(idKunde == kunde.IdKunde && kennwort == kunde.Kennwort){
+    let laenderkennung = "DE"
+    let bankleitzahl = 27000000
 
-        // Ein Cookie namens 'istAngemeldetAls' wird beim Browser gesetzt.#
-        // Der Wert des Cookies ist das in eine Zeichenkette umgewandelte Kunden-Objekt.
-        // Der Cookie wird signiert, also gegen Manpulation geschützt. 
+    // Die Zahl 1111111111 wird zugewisen an eine Variable namens min.
+    
+    let min = 1111111111;
 
-        serverAntwort.cookie('istAngemeldetAls',JSON.stringify(kunde),{signed:true})
-        console.log("Der Cookie wurde erfolgreich gesetzt")
+    // Die Zahl 9999999999 wird zugewisen an eine Variable namens max.
 
-        // Wenn die Id des Kunden mit der Eingabe im Browser übereinstimmt
-        // Und("&&") das Kennwort ebenfalls 
-        // dann gibt der SErver die gerenderte Index-Seite zurück.
-        serverAntwort.render('index.ejs', {})          
+    let max = 9999999999;
+
+    // Eine Zufallszahl zwischen min und max wird von der Math_Bibliothek mit Mathhode random()
+    // erzeugt und an dei Variable zufaelligeKontonummer zugewiesen.
+
+    let zufaelligeKontonummer = Math.floor(Math.random()* (max - min + 1)) + min;
+
+    console.log(zufaelligeKontonummer)
+
+    // Die IBAN wird mit einer Node-Bibliothek names IBAN errechnet.
+    // Die Parameter der Funktion zur Berechnung der IBAN sind:
+    // Laenderkennung, bankleitzahl und Kontonummer. 
+    
+    let iban = IBAN.fromBBAN(laenderkennung,bankleitzahl+ " " +zufaelligeKontonummer) 
+    
+    console.log("IBAN: " + iban)
+
+
+
+    // Wenn die IBAN korrekt ist , dann wird in der Console ausgegeben: "Iban ist gültig."
+
+    if(IBAN.isValid(iban)){
+        console.log("die IBAN ist gueltig")
     }else{
-        // Wenn sie nicht übereinstimmen wird die Login-Seite geladen. 
-    serverAntwort.render('login.ejs', {
-        Meldung : "Ihre Zugangsdaten sind falsch."
-    })  
+        console.log("diese IBAN ist nicht gueltig")
     }
-    serverAntwort.render('login.ejs', {
-        Meldung : "Bitte geben sie ihere Zugangsdaten ein. "
-    })         
+// Für die generrirte IBAN muss ein neuer Datensatz in der Tabelle konto angelegt werden. 
+
+dbVerbindung.query('INSERT INTO konto(iban, idKunde, anfangssaldo, kontoart, timestamp) VALUES ("' + iban + '",154289, 1,"'+ kontoart +'", NOW()) ;', function (fehler) {
+      
+    // Falls ein Problem bei der Query aufkommt, ...
+    
+    if (fehler) {
+    
+            // ... und der Fehlercode "ER_TABLE_EXISTS_ERROR" lautet, ...
+
+        if(fehler.code == "ER_TABLE_EXISTS_ERROR"){
+
+                //... dann wird eine Fehlermdldung geloggt. 
+
+                console.log("Tabelle kredit existiert bereits und wird nicht angelegt.")
+            
+            }else{
+                console.log("Fehler: " + fehler )
+            }
+            }else{
+                console.log("Tabelle kredit erfolgreich angelegt.")
+            }
+        });
+    
+         serverAntwort.render('kontoAnlegen.ejs', {
+        
+    })              
         
 })
 
