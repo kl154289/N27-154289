@@ -71,7 +71,7 @@ var dbVerbindung = mysql.createConnection({
 
             console.log("Tabelle kunde existiert bereits und wird nicht angelegt.")
      }else{
-         console.log("Fehler: " + fehler )
+         console.log("Fehler: " + fehler + "Kunde")
          }
         }else{
          console.log("Tabelle Kunde erfolgreich angelegt.")
@@ -95,7 +95,7 @@ var dbVerbindung = mysql.createConnection({
                 console.log("Tabelle kredit existiert bereits und wird nicht angelegt.")
             
             }else{
-                console.log("Fehler: " + fehler )
+                console.log("Fehler: " + fehler +" kredit")
             }
         }else{
                 console.log("Tabelle kredit erfolgreich angelegt.")
@@ -103,7 +103,7 @@ var dbVerbindung = mysql.createConnection({
       })
       // Eine Tabelle namens Konto wird neu angelegt falls sie noch nicht existiert 
 
-      dbVerbindung.query('CREATE TABLE konto(iban VARCHA(45), idKunde INT(11), anfangssaldo FLOAT, kontoart VARCHA(45), timestamp TIMESTAMP, PRIMARY KEY(iban));', function (fehler) {
+      dbVerbindung.query('CREATE TABLE konto(iban VARCHAR(45), idKunde INT(11), anfangssaldo FLOAT, kontoart VARCHAR(45), timestamp TIMESTAMP, PRIMARY KEY(iban));', function (fehler) {
       
         // Falls ein Problem bei der Query aufkommt, ...
         
@@ -118,7 +118,7 @@ var dbVerbindung = mysql.createConnection({
                 console.log("Tabelle kredit existiert bereits und wird nicht angelegt.")
             
             }else{
-                console.log("Fehler: " + fehler )
+                console.log("Fehler: " + fehler +" konto" )
             }
         }else{
                 console.log("Tabelle kredit erfolgreich angelegt.")
@@ -130,7 +130,7 @@ var dbVerbindung = mysql.createConnection({
 
     
 
-    dbVerbindung.query('INSERT INTO kunde(idKunde, vorname, nachname, ort, kennwort, mail) VALUES (150000, "Pit", "Kiff", "BOR", "123!", "pk@web.de") ;', function (fehler) {
+    dbVerbindung.query('INSERT INTO kunde(idKunde, vorname, nachname, ort, kennwort, mail) VALUES (154289, "Pit", "Kiff", "BOR", "123!", "pk@web.de") ;', function (fehler) {
       
         // Falls ein Problem bei der Query aufkommt, ...
         
@@ -145,7 +145,7 @@ var dbVerbindung = mysql.createConnection({
                 console.log("Tabelle kredit existiert bereits und wird nicht angelegt.")
             
             }else{
-                console.log("Fehler: " + fehler )
+                console.log("Fehler: " + fehler +" I kunde" )
             }
         }else{
                 console.log("Tabelle kredit erfolgreich angelegt.")
@@ -499,11 +499,15 @@ if(browserAnfrage.signedCookies['istAngemeldetAls']){
         // Mit FROM wird die Tabelle angegeben, aus der der Result eingelesen werden soll.      
         // Mit WHERE wird zeilenwiese gefilert    
     
-    dbVerbindung.query('SELECT iban FROM konto WHERE idKunde = 154289;', function (fehler, result) {
+    dbVerbindung.query('SELECT * FROM konto WHERE idKunde = 154289;', function (fehler, result) {
       
         console.log(result)
+
+
+
+   
         // sobald der "Button Kontostand anzeigen" auf der Index-Seite gedrückt wird,
-        // wird die meineApp.get ('/kontosatdAnzeigen'- Funktion abgearbeitet) 
+        // wird die meineApp.get ('/kontostandAnzeigen'- Funktion abgearbeitet) 
         serverAntwort.render('kontostandAnzeigen.ejs', {
             MeineIbans: result, 
             Kontostand: konto.Kontostand,
@@ -526,6 +530,24 @@ if(browserAnfrage.signedCookies['istAngemeldetAls']){
             
     
 }) 
+//meineApp.post('/kontostandAnzeigen',(browserAnfrage, serverAntwort, next) => {
+    
+//    let iban2 = browserAnfrage.body.iban
+
+//   dbVerbindung.query('SELECT kontoart FROM konto WHERE iban = iban2 ;', function (fehler, result) {
+      
+//      console.log(result)
+
+
+ //       serverAntwort.render('kontostandAnzeigen.ejs', {
+            
+ //           Kontostand: result,
+  //          IBAN: konto.IBAN,
+ //           Kontoart: konto.Kontoart, 
+  //          PIN: konto.PIN 
+       
+ //   })  
+//}) 
 meineApp.get('/kreditrechner',(browserAnfrage, serverAntwort, next) => {
     if(browserAnfrage.signedCookies['istAngemeldetAls']){
         serverAntwort.render('kreditrechner.ejs', {

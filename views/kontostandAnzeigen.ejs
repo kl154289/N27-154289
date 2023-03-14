@@ -48,15 +48,24 @@
 
             <label1  for="Iban">IBAN wählen:</label> <br>
                 <select class="meldung1" id="iban" name="iban">
-                  <option value="IBAN"> <%= MeineIbans %> </option> 
+                    <!--Die for-Schleife sorgt dafür, dass das Dropdownmenü alle Konten zur Auswahl anzeigt.
+                    Bei 5 Konten wird die schleife 5 mal zu durchlaufen
+                    MeineIbans ist die Liste, die beim rendern an dem Browser übergeben wird.
+                    Die Eigenschaft length gibt die Anzahl der Elemente in der Liste zurück.
+                    Mit eckigen Klammer hinter MeineIbans kann ein einzelnes Element der Liste Ausgewählt werden.
+                    Mit .iban wird die Eigenschaft Iban ausgelesen.-->
+                  <% for (var i=0; i < MeineIbans.length ;i++){ %>
+                    <option value="<%= MeineIbans [i].iban %>"> <%= MeineIbans [i].iban %> </option>
+                  <% } %> 
                 </select>
 
+                <button class="save" formaction="/kontostandAnzeigen" > Select</button>
+
             <label1 for="fname">Kontoart:</label><br>
-                <input class="meldung1" readonly value=<%= Kontoart %> > <br>
-            <label1 for="fname">IBAN:</label><br>
-                <input class="meldung1" readonly value=<%= IBAN %> > <br>
+                <input class="meldung1" readonly value=<%= MeineIbans [0].kontoart %> > <br>
+            
             <label1 for="fname">Kontostand:</label><br>
-                <input class="meldung1" type="number" readonly value=<%= Kontostand %>  > <br>     
+                <input class="meldung1" type="number" readonly value=<%= MeineIbans [0].anfangssaldo %>  > <br>     
             
         </div>
         <div class="fusszeile">
