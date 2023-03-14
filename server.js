@@ -542,9 +542,8 @@ if(browserAnfrage.signedCookies['istAngemeldetAls']){
  //       serverAntwort.render('kontostandAnzeigen.ejs', {
             
  //           Kontostand: result,
-  //          IBAN: konto.IBAN,
- //           Kontoart: konto.Kontoart, 
-  //          PIN: konto.PIN 
+//            IBAN: konto.IBAN,
+ //           Kontoart: konto.Kontoart
        
  //   })  
 //}) 
