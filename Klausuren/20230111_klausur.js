@@ -63,3 +63,51 @@ for(let i = 3; i > 0; i--){
     console.log("Countdown: " + i)
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+for(let i=10;i>0;i--){
+    console.log("Countdown " +  i)}
+
+    for(var i=10;i>0;i--){
+        console.log("Countdown " +  i)}
+
+
+
+// Ein Euro wird auf dem Sparbuch angelegt bei 15% Zinsen. Wie  hoch ist der Kapitalwert
+// nach 5 Jahren
+
+let kapital = 1
+let zinssatz1 = 0.15 
+let laufzeit1 = 5
+let sparbuch = ""
+let kapa= ""
+
+for(let i=0;i<5;i++){
+
+    kapa = (kapital+kapital*zinssatz1)
+    
+}
+console.log("kapital: " + kapa)
+
+let anfangsbetrag2 = 1
+let zinssatz2 = 0.1
+let kapitalwert2 = anfangsbetrag
+let laufzeit2 = 2
+
+for(let i = 0; i < laufzeit; i++){
+    kapitalwert2 = kapitalwert2 + kapitalwert2 * zinssatz2
+}
