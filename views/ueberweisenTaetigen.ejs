@@ -12,7 +12,7 @@
 <body>
     <div class="rahmen">
         <div class="kopf">
-            <h1>Willkommen bei der N27</h1>            
+            <h1>Überweisen</h1>            
         </div>
         <div class="navigationsleiste">
             <div class="tooltip">
@@ -45,18 +45,28 @@
             </div>   
         </div>
         <div class="inhaltsbereich">
-            <form>
-                <button class="save" formaction="/kontostandAnzeigen"> <i class="fa fa-university" aria-hidden="true"></i> Kontostand anzeigen</button>
-            </form>
-            <form>
-                <button class="save" formaction="/kreditrechner"> <i class="fa fa-calculator" aria-hidden="true"></i> zum Kreditrechner </button>
-            </form>
-            <form>
-                <button class="save" formaction="/kontoAnlegen"><i class="fa fa-book" aria-hidden="true"></i> Konto anlegen </button>
-            </form>
-            <form>
-                <button class="save" formaction="/ueberweisenTaetigen"><i class="fa fa-paper-plane-o" aria-hidden="true"></i> Überweisung tätigen </button>
-            </form>
+        <form method="post">
+            <label1 for="fname">Konto:</label><br>
+
+                <select class="meldung1" id="iban" name="iban">
+                <% for (var i=0; i < MeineIbans.length ;i++){ %>
+                    <option value="<%= MeineIbans [i].iban %>"> <%= MeineIbans [i].iban %> </option>
+                <% } %> 
+                </select>
+            <label1 for="fname">Empfänger:</label><br>
+                <select class="meldung1" id="iban" name="iban">
+                    <% for (var i=0; i < MeineIbans.length ;i++){ %>
+                      <option value="<%= MeineIbans [i].iban %>"> <%= MeineIbans [i].iban %> </option>
+                    <% } %> 
+                  </select>
+            <label1 for="fname">Betrag:</label><br>
+            <input name="Betrag" type="number" class="meldung1"> <br> 
+
+            <label1 for="fname">Verwendungszweck:</label><br>
+            <input name="Verwendungszweck" type="text" class="meldung1"> <br>
+            
+            <button class="save" formaction="/profil" ><i class="fa fa-paper-plane-o" aria-hidden="true"></i> Überweisen </button>
+        </form>
         </div>
         <div class="fusszeile">
             &copy; 2022 GW21A

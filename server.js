@@ -27,8 +27,8 @@ var dbVerbindung = mysql.createConnection({
     // Wenn der Rechner auf ping antwortet, aber kein connect aufgebaut werden kann,
     //  dann muss geprüft werden, ob der Datenbank-Dienst auf dem Rechener läuft. 
     // Dazu melden wir uns auf den Datenbanksecer an und starten die MySQL-Workbanch. 
-    
-    host: "130.255.124.99",
+    // public hoste "130.255.124.99"
+    host: "10.40.38.110",
     user: "placematman",
     password: "BKB123456!",
     database: "dbn27" 
@@ -704,10 +704,29 @@ dbVerbindung.query('INSERT INTO konto(iban, idKunde, anfangssaldo, kontoart, tim
         
 })
 
+meineApp.get('/ueberweisenTaetigen',(browserAnfrage, serverAntwort, next) => {
+    if(browserAnfrage.signedCookies['istAngemeldetAls']){
+        serverAntwort.render('support.ejs', {
+            
+        })
+
+    }else{
+
+    // Wenn der Kunde nichtbereits angemeldet ist, soll die 
+    // Login-Seite an den Browser gegeben werden.
+
+        serverAntwort.render('login.ejs', {
+            Meldung : ""
+        })  
+    } 
+            
+    
+}) 
+
 
 //require('./Uebungen/ifUndElse.js')
 //require('./Uebungen/klasseUndObjekt.js')
 //require('./Klausuren/20220531_klausur.js')
 //require('./Klausuren/20221026_klausur.js')
-require('./Klausuren/20230111_klausur.js')
+//require('./Klausuren/20230111_klausur.js')
 // onclick="alert('Änderungen gespeicher')" 
