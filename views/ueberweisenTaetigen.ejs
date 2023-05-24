@@ -46,27 +46,24 @@
         </div>
         <div class="inhaltsbereich">
         <form method="post">
-            <label1 for="fname">Konto:</label><br>
+            <label1 for="fname">Absender-Iban:</label><br>
 
-                <select class="meldung1" id="iban" name="iban">
+                <select class="meldung1" id="iban" name="AbsenderIban">
                 <% for (var i=0; i < MeineIbans.length ;i++){ %>
                     <option value="<%= MeineIbans [i].iban %>"> <%= MeineIbans [i].iban %> </option>
                 <% } %> 
                 </select>
             <label1 for="fname">Empfänger:</label><br>
-                <select class="meldung1" id="iban" name="iban">
-                    <% for (var i=0; i < MeineIbans.length ;i++){ %>
-                      <option value="<%= MeineIbans [i].iban %>"> <%= MeineIbans [i].iban %> </option>
-                    <% } %> 
-                  </select>
+                <input name="Empfaenger" type="text" class="meldung1"> <br>
             <label1 for="fname">Betrag:</label><br>
-            <input name="Betrag" type="number" class="meldung1"> <br> 
+            <input name="Betrag" type="number" class="meldung1">  <br> 
 
             <label1 for="fname">Verwendungszweck:</label><br>
-            <input name="Verwendungszweck" type="text" class="meldung1"> <br>
+            <input name="Verwendungszweck" type="text" class="meldung1">  <br>
             
-            <button class="save" formaction="/profil" ><i class="fa fa-paper-plane-o" aria-hidden="true"></i> Überweisen </button>
+            <button class="save" formaction="/ueberweisenTaetigen" ><i class="fa fa-paper-plane-o" aria-hidden="true"></i> Überweisen </button>
         </form>
+        <p class="meldung2"> <%=Erfolgsmeldung%></p>
         </div>
         <div class="fusszeile">
             &copy; 2022 GW21A

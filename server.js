@@ -29,6 +29,7 @@ var dbVerbindung = mysql.createConnection({
     // Dazu melden wir uns auf den Datenbanksecer an und starten die MySQL-Workbanch. 
     // public hoste "130.255.124.99"
     host: "10.40.38.110",
+    //hoste: "130.255.124.99",
     user: "placematman",
     password: "BKB123456!",
     database: "dbn27" 
@@ -706,9 +707,27 @@ dbVerbindung.query('INSERT INTO konto(iban, idKunde, anfangssaldo, kontoart, tim
 
 meineApp.get('/ueberweisenTaetigen',(browserAnfrage, serverAntwort, next) => {
     if(browserAnfrage.signedCookies['istAngemeldetAls']){
-        serverAntwort.render('support.ejs', {
+        
+        let kunde = new Kunde()
+        // Das Objekt Kunde wird mit der Funktion Jason.parse aus dem Cookie gewonnen 
+        kunde = JSON.parse(browserAnfrage.signedCookies['istAngemeldetAls'])
+        // Anschleißend wir die Eigenschaft IdKunde ausgelesen.
+        console.log(kunde. IdKunde)
+
+        dbVerbindung.query('SELECT iban FROM konto WHERE idKunde = '+ kunde.IdKunde +';', function (fehler, result) {
+      
+            console.log(result)
+        
+        serverAntwort.render('ueberweisenTaetigen', {
+            MeineIbans: result, 
+            Erfolgsmeldung: "",
+            Betrag: "",
+            Empfaenger: "",
+            Verwendungstweck: ""
             
         })
+
+    })   
 
     }else{
 
@@ -716,17 +735,139 @@ meineApp.get('/ueberweisenTaetigen',(browserAnfrage, serverAntwort, next) => {
     // Login-Seite an den Browser gegeben werden.
 
         serverAntwort.render('login.ejs', {
-            Meldung : ""
+            Meldung : "",
+            
         })  
     } 
             
     
 }) 
 
+meineApp.post('/ueberweisenTaetigen',(browserAnfrage, serverAntwort, next) => {
+    if(browserAnfrage.signedCookies['istAngemeldetAls']){
+        // Der Wert von AbsenderIban aus der Browseranfrage wird der constante Iban zugewiesen (=)
+        const iban = browserAnfrage.body.AbsenderIban
+                console.log(iban)
+        
+                // Die Datenbank wird Abgefragt und der passende Datensatz mit allenAtributwerten (*) zur Iban als 
+                // result an den Server übergeben.
+        dbVerbindung.query('SELECT * FROM konto WHERE iban = "'+iban+'";', function (fehler, result) {
+            console.log(result)
+            // Der Result besteht möglichherweise aus vielen Datensätzen
+            // umd den result auf den ersten Datensatz zu begerenzen, wird [0]hinter
+            // dem Result angegeben. Zuletzt wird die Eigenschaft anfangssaldo mit Punkt 
+            // angehängt. Der Zweite Datensatz würde mit result[1].anfangsaldo ausgelesen.   
+            console.log("Anfangssaldo: " + result[0].anfangssaldo)
+            // Ein Objekt vom Typ Kunde wird deklarirt und instanziiert.
+            // Der String (=Zeichenkette) wird zugewiesen (=) an eine variable namens  erfolgsmeldung  
+            let kunde = new Kunde()
+            let erfolgsmeldung = ""
+
+            kunde = JSON.parse(browserAnfrage.signedCookies['istAngemeldetAls'])
+            console.log(kunde.IdKunde)
+            
+                
+                const betrag = browserAnfrage.body.Betrag
+                console.log(betrag)
+                const verwendungstweck = browserAnfrage.body.Verwendungszweck
+                console.log(verwendungstweck)
+                const empfaenger = browserAnfrage.body.Empfaenger
+                console.log(empfaenger)
+                // Empfänger-Iban auf Gültigkeit prüfen:
+                // Die funktion isValid() wird auf das IBAN-Modul aufgerufen.
+                // Als Parameter in den runden Klammern wird die 
+                // Empfänger-IBAN übergeben. Die Funktion isValid() gibt entweder den Wert 
+                //true oder false zurück. 
+                if(IBAN.isValid(empfaenger)){
+
+                    // Wenn der empfaenger gültig ist, dann wird der String "Erfolg" 
+                    //der Variablen namens erfolgsmeldung zugewiesen.  
+
+                    erfolgsmeldung = erfolgsmeldung + "Die Empfänger-IBAN ist gültig "
+                    
+                }else{
+                    erfolgsmeldung = erfolgsmeldung + "Die Empfänger-IBAN ist ungültig. "
+                }
+
+                // Prüfung, ob der Kontostand des Absenders ausreicht.
+
+                // Der Kontostand wir aus der Datenbank ausgelesen:
+
+                
+                // Der gewünschte Überweisungsbetrag wird mit dem ausgelesenen Kontostand verglichen.
+
+                if(betrag <= result[0].anfangssaldo){
+
+                    // Der Wert der Variablen erfolgsmeldung wird ergänzt um die weitere Meldung. 
+                    // De String "Das Absenderkonto.." wird verkettet mit dem werde der Variablen Erfolgsmeldung und dann
+                    // zugewisen (=) an die Variable erfolgsmeldung. 
+                    erfolgsmeldung = erfolgsmeldung + "Das Absenderkonto ist gedeckt. "
+
+                    // Überweisung in die Datenbank schreiben:
+                    // Zuerst wird zwischen der inneren Klammer der Betrag von Anfangssaldo abgezogen.
+                    // Dannach wird alles miteinander verkettet.                    
+
+
+                    dbVerbindung.query('UPDATE konto SET anfangssaldo = '+ (parseFloat(result[0].anfangssaldo) - parseFloat(betrag)) +' WHERE iban = "'+iban+'";', function (fehler, result) {
+          
+                    
+                    
+                    })
+
+                    // Das Konto des Empfängers muss abgefragt werden um den Anfangssaldo erhöhen zu können.
+                    // Der erste Datensatz des result wirt mit [0] gefiltert.
+                    // Das Gewünschte Attrebut wird mit .anfangssaldo an den 
+                    // resultEmpfänger[0] angehängt.  
+
+                dbVerbindung.query('SELECT * FROM konto WHERE iban = "'+ empfaenger +'";', function (fehler, resultEmfaenger) {
+                console.log("Anfangssaldo des Emfängers vor der Überweisung: " + resultEmfaenger[0].anfangssaldo)
+
+                    
+                    
+                    // Die Gutschrift auf dem Empfängerkonto muss in die DB geschrieben werden:
+                    dbVerbindung.query('UPDATE konto SET anfangssaldo = '+ (parseFloat(resultEmfaenger[0].anfangssaldo) + parseFloat(betrag)) +' WHERE iban = "'+empfaenger+'";', function (fehler, result) {
+          
+                    
+                    
+                    })
+
+                })
+
+                }else{
+                    erfolgsmeldung = erfolgsmeldung + "Das Absenderkonto ist nicht gedeckt. " 
+                }
+
+
+                
+            
+
+        
+                console.log(result)
+            serverAntwort.render('ueberweisenTaetigen.ejs', {
+            MeineIbans: "",
+            Erfolgsmeldung: erfolgsmeldung,
+            AbsenderIban: iban,
+            Betrag: betrag,
+            Empfaenger: empfaenger,
+            Verwendungstweck: verwendungstweck
+            })
+
+        })
+
+        }else{
+
+        
+            serverAntwort.render('login.ejs', {
+                Meldung : ""
+            })  
+        } 
+            
+    
+}) 
 
 //require('./Uebungen/ifUndElse.js')
 //require('./Uebungen/klasseUndObjekt.js')
 //require('./Klausuren/20220531_klausur.js')
 //require('./Klausuren/20221026_klausur.js')
 //require('./Klausuren/20230111_klausur.js')
-// onclick="alert('Änderungen gespeicher')" 
+//onclick="alert('Änderungen gespeicher')" 

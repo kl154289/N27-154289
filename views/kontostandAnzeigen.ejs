@@ -45,7 +45,7 @@
             </div>   
         </div>
         <div class="inhaltsbereich">
-
+            <form method="post">
             <label1  for="Iban">IBAN wählen:</label> <br>
                 <select class="meldung1" id="iban" name="iban">
                     <!--Die for-Schleife sorgt dafür, dass das Dropdownmenü alle Konten zur Auswahl anzeigt.
@@ -66,7 +66,7 @@
             
             <label1 for="fname">Kontostand:</label><br>
                 <input class="meldung1" type="number" readonly value=<%= MeineIbans [0].anfangssaldo %>  > <br>     
-            
+            </form>
         </div>
         <div class="fusszeile">
             &copy; 2022 GW21A
