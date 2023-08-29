@@ -89,6 +89,28 @@ var dbVerbindung = mysql.createConnection({
     })
     })
 
+    dbVerbindung.query('CREATE TABLE kontobewegung(timestamp TIMESTAMP, betrag SMALLINT, empfaengerIban VARCHAR(45), verwendungszweck VARCHAR(45), absenderIban VARCHAR(45), name VARCHAR(45), PRIMARY KEY(empfaengerIban,timestamp));', function (fehler) {
+      
+        // Falls ein Problem bei der Query aufkommt, ...
+        
+        if (fehler) {
+        
+            // ... und der Fehlercode "ER_TABLE_EXISTS_ERROR" lautet, ...
+    
+            if(fehler.code == "ER_TABLE_EXISTS_ERROR"){
+    
+                //... dann wird eine Fehlermdldung geloggt. 
+    
+                console.log("Tabelle kontobewegung existiert bereits und wird nicht angelegt.")
+            
+            }else{
+                console.log("Fehler: " + fehler +" bewegung")
+            }
+        }else{
+                console.log("Tabelle kontobewegung erfolgreich angelegt.")
+         }
+      })
+
 
     dbVerbindung.query('CREATE TABLE kredit(idKunde INT(11), datum DATETIME, zinssatz FLOAT, laufzeit INT(11), betrag SMALLINT, PRIMARY KEY(idKunde,datum));', function (fehler) {
       
@@ -125,13 +147,13 @@ var dbVerbindung = mysql.createConnection({
     
                 //... dann wird eine Fehlermdldung geloggt. 
     
-                console.log("Tabelle kredit existiert bereits und wird nicht angelegt.")
+                console.log("Tabelle konto existiert bereits und wird nicht angelegt.")
             
             }else{
                 console.log("Fehler: " + fehler +" konto" )
             }
         }else{
-                console.log("Tabelle kredit erfolgreich angelegt.")
+                console.log("Tabelle konto erfolgreich angelegt.")
          }
       })
   
@@ -152,13 +174,13 @@ var dbVerbindung = mysql.createConnection({
     
                 //... dann wird eine Fehlermdldung geloggt. 
     
-                console.log("Tabelle kredit existiert bereits und wird nicht angelegt.")
+                console.log("Tabelle kunde existiert bereits und wird nicht angelegt.")
             
             }else{
                 console.log("Fehler: " + fehler +" I kunde" )
             }
         }else{
-                console.log("Tabelle kredit erfolgreich angelegt.")
+                console.log("Tabelle kunde erfolgreich angelegt.")
          }
     });
     
@@ -519,11 +541,13 @@ if(browserAnfrage.signedCookies['istAngemeldetAls']){
         // sobald der "Button Kontostand anzeigen" auf der Index-Seite gedrückt wird,
         // wird die meineApp.get ('/kontostandAnzeigen'- Funktion abgearbeitet) 
         serverAntwort.render('kontostandAnzeigen.ejs', {
+            // Der result wird an die ejs-Seite übergeben und steckt dann in dem Attribut MeineIbans.
+            // Der Datentyp von MeineIbans ist dann eine Liste   
             MeineIbans: result, 
             Kontostand: konto.Kontostand,
             IBAN: konto.IBAN,
             Kontoart: konto.Kontoart, 
-            PIN: konto.PIN 
+            
        
      });
    
@@ -540,23 +564,89 @@ if(browserAnfrage.signedCookies['istAngemeldetAls']){
             
     
 }) 
-//meineApp.post('/kontostandAnzeigen',(browserAnfrage, serverAntwort, next) => {
-    
-//    let iban2 = browserAnfrage.body.iban
 
-//   dbVerbindung.query('SELECT kontoart FROM konto WHERE iban = iban2 ;', function (fehler, result) {
+// Wenn der Button "Bitte ein Konto auswählen" gedrückt wird, wird die 
+// meineApp.post-Funktion abgearbeitet. 
+meineApp.post('/kontostandAnzeigen',(browserAnfrage, serverAntwort, next) => {
+    // Es wird eine Variable namens index instanziert. Beim Schleifendurchlauf 
+    // Der Variable index zugeordnet werden  
+    var index
+
+    // Eine Verbindung zur DB wird ausgewählt. Alle Zeilen werden ausgewählt, in dennen die Id Kunde .... ist.
+    // Das Ergebnis, das die DB uns zurückgibt steckt im result. 
+
+    dbVerbindung.query('SELECT * FROM konto WHERE idKunde = 154289;', function (fehler, result) {
       
-//      console.log(result)
+        // Der result (alle meine Konte werden auf der Konsiole gelockt)
 
+        console.log(result)
+        console.log("Gewählte IBAN")
 
- //       serverAntwort.render('kontostandAnzeigen.ejs', {
+        // Die IBAN, die im select ausgewählt wurde, wird auf der Konsole geloggt. 
+
+        console.log(browserAnfrage.body.iban)
+
+        // Der Wert der Variablen IBAN aus der Browseranffrage wird der Variablen "ausgewaeltesKonto" zugewiesen. 
+
+        var ausgewahltesKonto = browserAnfrage.body.iban
+        // Mit der for Schleife wird der Result solange durchlaufen, bis der Wert vom ausgewähltesKonto
+        // mit dem Wert des durchlaufenen Kontos übereinstimmt.
+
+        // Zur For-Schleife: Eine For-Schleife beteht immer aus drei Teilen:
+        // let i = 0: Einer Varaiablen namens i wird mit 0 initialisiert.
+        // i<= result.length: Die Schleife wird so lange durchlaufen, bis die Anzahl 
+        // der Elemente im result erreicht ist. 
+        // i++: wird mit jedem Schleifendurchlauf um 1 hochgezählt.  
+        
+        for (let i = 0; i <= result.length; i++) {
+            console.log(i)
+            //Wenn der Variablen ausgewaeltesKonto mit dem
+            // gerade in der Schleife durchlaufenen Element aus dem result übereinstimmt,...
+
+            if(ausgewahltesKonto == result[i].iban){
+
+                //... dann werden die Eigenschaften des Kontos aus dem result geloggt: 
+
+                console.log("Kontoart des ausgewählten Kontos:" )
+                console.log(result[i].kontoart)
+                console.log("Anfangssaldo des ausgewählten Kontos:")
+                console.log(result[i].anfangssaldo)
+                console.log("Index des ausgewählten Kontos:")
+                console.log(i)
+
+                //sobald das gewünschte Element gefunden wurde, verlassen wir die Schleife
+                // mit dem Befehl break:
+
+                var index = i
             
- //           Kontostand: result,
-//            IBAN: konto.IBAN,
- //           Kontoart: konto.Kontoart
+
+                break; 
+            }
+
+        }
+        
+
+
+
+   
+        // sobald der "Button Kontostand anzeigen" auf der Index-Seite gedrückt wird,
+        // wird die meineApp.get ('/kontostandAnzeigen'- Funktion abgearbeitet) 
+        serverAntwort.render('kontostandAnzeigen.ejs', {
+            // Der result wird an die ejs-Seite übergeben und steckt dann in dem Attribut MeineIbans.
+            // Der Datentyp von MeineIbans ist dann eine Liste   
+            MeineIbans: result, 
+            Kontostand: result[index].anfangssaldo,
+            IBAN: result[index].iban,
+            Kontoart: result[index].kontoart,
+            
        
- //   })  
-//}) 
+     });
+   
+        
+})
+    
+
+}) 
 meineApp.get('/kreditrechner',(browserAnfrage, serverAntwort, next) => {
     if(browserAnfrage.signedCookies['istAngemeldetAls']){
         serverAntwort.render('kreditrechner.ejs', {
@@ -785,9 +875,7 @@ meineApp.post('/ueberweisenTaetigen',(browserAnfrage, serverAntwort, next) => {
 
                     erfolgsmeldung = erfolgsmeldung + "Die Empfänger-IBAN ist gültig "
                     
-                }else{
-                    erfolgsmeldung = erfolgsmeldung + "Die Empfänger-IBAN ist ungültig. "
-                }
+               
 
                 // Prüfung, ob der Kontostand des Absenders ausreicht.
 
@@ -815,8 +903,8 @@ meineApp.post('/ueberweisenTaetigen',(browserAnfrage, serverAntwort, next) => {
                     })
 
                     // Das Konto des Empfängers muss abgefragt werden um den Anfangssaldo erhöhen zu können.
-                    // Der erste Datensatz des result wirt mit [0] gefiltert.
-                    // Das Gewünschte Attrebut wird mit .anfangssaldo an den 
+                    // Der erste Datensatz (Zeile) des result wirt mit [0] gefiltert.
+                    // Das Gewünschte Attrebut wird mit .anfangssaldo(Spalte) an den 
                     // resultEmpfänger[0] angehängt.  
 
                 dbVerbindung.query('SELECT * FROM konto WHERE iban = "'+ empfaenger +'";', function (fehler, resultEmfaenger) {
@@ -826,32 +914,40 @@ meineApp.post('/ueberweisenTaetigen',(browserAnfrage, serverAntwort, next) => {
                     
                     // Die Gutschrift auf dem Empfängerkonto muss in die DB geschrieben werden:
                     dbVerbindung.query('UPDATE konto SET anfangssaldo = '+ (parseFloat(resultEmfaenger[0].anfangssaldo) + parseFloat(betrag)) +' WHERE iban = "'+empfaenger+'";', function (fehler, result) {
-          
+
+                        
                     
                     
                     })
-
+                    // Mit dem += Operator wird die Zeichenkette um einen weiteren String verlängert.
+                    
+                    erfolgsmeldung+= "Die Überweisung wurde erfolgreich ausgeführt."
                 })
 
                 }else{
                     erfolgsmeldung = erfolgsmeldung + "Das Absenderkonto ist nicht gedeckt. " 
                 }
-
+            }else{
+                erfolgsmeldung = "Die Empfänger-IBAN ist ungültig. "
 
                 
-            
+            }
 
-        
+                
+            dbVerbindung.query('SELECT iban FROM konto WHERE idKunde = '+ kunde.IdKunde +';', function (fehler, resultIban) {
+      
+
+            
                 console.log(result)
             serverAntwort.render('ueberweisenTaetigen.ejs', {
-            MeineIbans: "",
+            MeineIbans: resultIban,
             Erfolgsmeldung: erfolgsmeldung,
             AbsenderIban: iban,
             Betrag: betrag,
             Empfaenger: empfaenger,
             Verwendungstweck: verwendungstweck
             })
-
+            })
         })
 
         }else{
@@ -861,6 +957,60 @@ meineApp.post('/ueberweisenTaetigen',(browserAnfrage, serverAntwort, next) => {
                 Meldung : ""
             })  
         } 
+            
+    
+}) 
+
+meineApp.get('/kontobewegung',(browserAnfrage, serverAntwort, next) => {
+    if(browserAnfrage.signedCookies['istAngemeldetAls']){
+        dbVerbindung.query('SELECT * FROM konto WHERE idKunde = 154289;', function (fehler, result) {
+      
+            console.log(result)
+    
+        serverAntwort.render('kontobewegung.ejs', {
+            MeineIbans: result
+        })
+    })
+
+    }else{
+
+    
+        serverAntwort.render('login.ejs', {
+            Meldung : ""
+        })  
+    } 
+            
+    
+}) 
+
+meineApp.post('/kontobewegung',(browserAnfrage, serverAntwort, next) => {
+    if(browserAnfrage.signedCookies['istAngemeldetAls']){
+
+        var iban = browserAnfrage.body.iban
+        console.log(iban)
+        
+        dbVerbindung.query('SELECT * FROM konto WHERE ibKunde = 154289;', function (fehler, result) {
+            
+                    console.log(result)
+
+            dbVerbindung.query('SELECT * FROM kontobewegung WHERE iban = '+ iban +';', function (fehler, result1) {
+            
+                    console.log(result1)
+            
+                serverAntwort.render('kontobewegung.ejs', {
+                MeineIbans: result,
+                Bewegungen: result1
+
+                })
+            })
+        })
+    }else{
+
+    
+        serverAntwort.render('login.ejs', {
+            Meldung : ""
+        })  
+    } 
             
     
 }) 
