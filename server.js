@@ -89,7 +89,17 @@ var dbVerbindung = mysql.createConnection({
     })
     })
 
-    dbVerbindung.query('CREATE TABLE kontobewegung(timestamp TIMESTAMP, betrag SMALLINT, empfaengerIban VARCHAR(45), verwendungszweck VARCHAR(45), absenderIban VARCHAR(45), name VARCHAR(45), PRIMARY KEY(empfaengerIban,timestamp));', function (fehler) {
+    // Datenbanken können verhindern, dass z.B. ein Konto gelöscht wird, zu dem es noch
+    // Kontobewegungen gibt. Das ist ein Sichherheitsmechanissmus. In der Creat Tabel...
+    // muss am Ende ergänzt werden: , FOREIGN KEY (absenderIban) REFERENCES konto(iban)
+    // Das bedeutet, dass zu der absenderIban in der Kontobewegung-Tabelle eine Iban
+    // in der Kontotabelle existiert. Bevor ein Konto gelöscht werden kann, müssen alle 
+    // Kontobewegungen gelöscht werden. Man sagt dazu, dass eine LÖSCHANOMALIE verhindert
+    // wird. Ebenso kann keine Kontobewegung angelegt werden zu einem Konto, dass es nicht 
+    // gibt. Das würde man EINFÜGEANOMALIE nennen. 
+
+
+    dbVerbindung.query('CREATE TABLE kontobewegung(timestamp TIMESTAMP, betrag SMALLINT, empfaengerIban VARCHAR(45), verwendungszweck VARCHAR(45), absenderIban VARCHAR(45), name VARCHAR(45), PRIMARY KEY(empfaengerIban,timestamp), FOREIGN KEY (absenderIban) REFERENCES konto(iban));', function (fehler) {
       
         // Falls ein Problem bei der Query aufkommt, ...
         
@@ -859,10 +869,12 @@ meineApp.post('/ueberweisenTaetigen',(browserAnfrage, serverAntwort, next) => {
                 
                 const betrag = browserAnfrage.body.Betrag
                 console.log(betrag)
-                const verwendungstweck = browserAnfrage.body.Verwendungszweck
-                console.log(verwendungstweck)
+                const verwendungszweck = browserAnfrage.body.Verwendungszweck
+                console.log(verwendungszweck)
                 const empfaenger = browserAnfrage.body.Empfaenger
                 console.log(empfaenger)
+                const name = browserAnfrage.body.name
+                console.log(name)
                 // Empfänger-Iban auf Gültigkeit prüfen:
                 // Die funktion isValid() wird auf das IBAN-Modul aufgerufen.
                 // Als Parameter in den runden Klammern wird die 
@@ -895,6 +907,10 @@ meineApp.post('/ueberweisenTaetigen',(browserAnfrage, serverAntwort, next) => {
                     // Zuerst wird zwischen der inneren Klammer der Betrag von Anfangssaldo abgezogen.
                     // Dannach wird alles miteinander verkettet.                    
 
+                    // Es muss für jede Überweisung ein neuer Datensatz in der Tabelle Kontobewegung eingefügt werden (INSERT INTO)
+                    dbVerbindung.query('INSERT INTO kontobewegung(timestamp, betrag, empfaengerIban, verwendungszweck, absenderIban, name) VALUES (NOW(),"'+betrag+'", "'+empfaenger+'", "'+verwendungszweck+'", "'+iban+'", "'+name+'" ) ;', function (fehler) {          
+                            
+                    })
 
                     dbVerbindung.query('UPDATE konto SET anfangssaldo = '+ (parseFloat(result[0].anfangssaldo) - parseFloat(betrag)) +' WHERE iban = "'+iban+'";', function (fehler, result) {
           
@@ -932,6 +948,7 @@ meineApp.post('/ueberweisenTaetigen',(browserAnfrage, serverAntwort, next) => {
 
                 
             }
+        
 
                 
             dbVerbindung.query('SELECT iban FROM konto WHERE idKunde = '+ kunde.IdKunde +';', function (fehler, resultIban) {
@@ -945,7 +962,7 @@ meineApp.post('/ueberweisenTaetigen',(browserAnfrage, serverAntwort, next) => {
             AbsenderIban: iban,
             Betrag: betrag,
             Empfaenger: empfaenger,
-            Verwendungstweck: verwendungstweck
+            Verwendungstweck: verwendungszweck
             })
             })
         })
@@ -968,7 +985,8 @@ meineApp.get('/kontobewegung',(browserAnfrage, serverAntwort, next) => {
             console.log(result)
     
         serverAntwort.render('kontobewegung.ejs', {
-            MeineIbans: result
+            MeineIbans: result,
+            IBAN: konto.IBAN,
         })
     })
 
@@ -989,17 +1007,55 @@ meineApp.post('/kontobewegung',(browserAnfrage, serverAntwort, next) => {
         var iban = browserAnfrage.body.iban
         console.log(iban)
         
-        dbVerbindung.query('SELECT * FROM konto WHERE ibKunde = 154289;', function (fehler, result) {
+        dbVerbindung.query('SELECT * FROM konto WHERE idKunde = 154289;', function (fehler, result) {
             
                     console.log(result)
 
-            dbVerbindung.query('SELECT * FROM kontobewegung WHERE iban = '+ iban +';', function (fehler, result1) {
+            dbVerbindung.query('SELECT * FROM kontobewegung WHERE absenderIban = '+ iban +';', function (fehler, result1) {
             
                     console.log(result1)
+
+                    var ausgewahltesKonto = browserAnfrage.body.iban
+                    // Mit der for Schleife wird der Result solange durchlaufen, bis der Wert vom ausgewähltesKonto
+                    // mit dem Wert des durchlaufenen Kontos übereinstimmt.
             
+                    // Zur For-Schleife: Eine For-Schleife beteht immer aus drei Teilen:
+                    // let i = 0: Einer Varaiablen namens i wird mit 0 initialisiert.
+                    // i<= result.length: Die Schleife wird so lange durchlaufen, bis die Anzahl 
+                    // der Elemente im result erreicht ist. 
+                    // i++: wird mit jedem Schleifendurchlauf um 1 hochgezählt.  
+                    
+                    for (let i = 0; i <= result.length; i++) {
+                        console.log(i)
+                        //Wenn der Variablen ausgewaeltesKonto mit dem
+                        // gerade in der Schleife durchlaufenen Element aus dem result übereinstimmt,...
+            
+                        if(ausgewahltesKonto == result[i].iban){
+            
+                            //... dann werden die Eigenschaften des Kontos aus dem result geloggt: 
+            
+                            console.log("Kontoart des ausgewählten Kontos:" )
+                            console.log(result[i].kontoart)
+                            console.log("Anfangssaldo des ausgewählten Kontos:")
+                            console.log(result[i].anfangssaldo)
+                            console.log("Index des ausgewählten Kontos:")
+                            console.log(i)
+            
+                            //sobald das gewünschte Element gefunden wurde, verlassen wir die Schleife
+                            // mit dem Befehl break:
+            
+                            var index = i
+                        
+            
+                            break; 
+                        }
+            
+                    }
+                               
                 serverAntwort.render('kontobewegung.ejs', {
                 MeineIbans: result,
-                Bewegungen: result1
+                Bewegungen: result1,
+                IBAN:  result[index].iban
 
                 })
             })
