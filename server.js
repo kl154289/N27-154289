@@ -817,6 +817,8 @@ meineApp.get('/ueberweisenTaetigen',(browserAnfrage, serverAntwort, next) => {
         dbVerbindung.query('SELECT iban FROM konto WHERE idKunde = '+ kunde.IdKunde +';', function (fehler, result) {
       
             console.log(result)
+
+            
         
         serverAntwort.render('ueberweisenTaetigen', {
             MeineIbans: result, 
@@ -826,7 +828,7 @@ meineApp.get('/ueberweisenTaetigen',(browserAnfrage, serverAntwort, next) => {
             Verwendungstweck: ""
             
         })
-
+    
     })   
 
     }else{
@@ -983,11 +985,17 @@ meineApp.get('/kontobewegung',(browserAnfrage, serverAntwort, next) => {
         dbVerbindung.query('SELECT * FROM konto WHERE idKunde = 154289;', function (fehler, result) {
       
             console.log(result)
+
+            dbVerbindung.query('SELECT * FROM kontobewegung WHERE absenderIban = "'+ result[0].iban +'";', function (fehler, resultkontobewegung) {
+            
+                console.log(resultkontobewegung)
     
         serverAntwort.render('kontobewegung.ejs', {
             MeineIbans: result,
             IBAN: konto.IBAN,
+            Bewegungen: resultkontobewegung
         })
+    })
     })
 
     }else{
@@ -1011,19 +1019,9 @@ meineApp.post('/kontobewegung',(browserAnfrage, serverAntwort, next) => {
             
                     console.log(result)
 
-            dbVerbindung.query('SELECT * FROM kontobewegung WHERE absenderIban = '+ iban +';', function (fehler, result1) {
             
-                    console.log(result1)
 
-                    var ausgewahltesKonto = browserAnfrage.body.iban
-                    // Mit der for Schleife wird der Result solange durchlaufen, bis der Wert vom ausgewähltesKonto
-                    // mit dem Wert des durchlaufenen Kontos übereinstimmt.
-            
-                    // Zur For-Schleife: Eine For-Schleife beteht immer aus drei Teilen:
-                    // let i = 0: Einer Varaiablen namens i wird mit 0 initialisiert.
-                    // i<= result.length: Die Schleife wird so lange durchlaufen, bis die Anzahl 
-                    // der Elemente im result erreicht ist. 
-                    // i++: wird mit jedem Schleifendurchlauf um 1 hochgezählt.  
+                    var ausgewahltesKonto = browserAnfrage.body.iban           
                     
                     for (let i = 0; i <= result.length; i++) {
                         console.log(i)
@@ -1048,14 +1046,19 @@ meineApp.post('/kontobewegung',(browserAnfrage, serverAntwort, next) => {
                         
             
                             break; 
-                        }
-            
+                    
+                        }  
                     }
+                    dbVerbindung.query('SELECT * FROM kontobewegung WHERE absenderIban = "'+ ausgewahltesKonto +'";', function (fehler, resultkontobewegung) {
+            
+                    console.log(resultkontobewegung)
+
                                
                 serverAntwort.render('kontobewegung.ejs', {
                 MeineIbans: result,
-                Bewegungen: result1,
-                IBAN:  result[index].iban
+                Bewegungen: resultkontobewegung,
+                IBAN:  result[index].iban,
+                Kontostand: result[index].anfangssaldo
 
                 })
             })

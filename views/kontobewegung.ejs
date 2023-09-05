@@ -57,32 +57,10 @@
                 <label1  for="Iban">Bewegungen für das Konto:</label> <br>
                 <input class="meldung1" readonly value=<%= IBAN %> > <br>
 
-                <table>
-                    <tr>
-                      <th>Datum</th>
-                      <th>Absender</th>
-                      <th>Empfänger</th>
-                      <th>Betrag</th>
-                    </tr>
-                    <tr>
-                      <td>2023-08-01</td>
-                      <td>Max Mustermann</td>
-                      <td>Lisa Müller</td>
-                      <td>150,00 €</td>
-                    </tr>
-                    <tr>
-                      <td>2023-08-03</td>
-                      <td>Lisa Müller</td>
-                      <td>Paul Schmidt</td>
-                      <td>50,00 €</td>
-                    </tr>
-                    <tr>
-                      <td>2023-08-05</td>
-                      <td>Anna Meier</td>
-                      <td>Max Mustermann</td>
-                      <td>75,00 €</td>
-                    </tr>
-                  </table>
+                <% for (var i=0; i < Bewegungen.length ;i++){ %>
+                  <label1> <%= Bewegungen [i].iban %>"> <%= Bewegungen [i].iban %> </label1>
+                <% } %> 
+                
                 
             
                 
