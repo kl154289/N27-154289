@@ -12,32 +12,28 @@
 <body>
     <div class="rahmen">
         <div class="kopf">
-            <h1>Willkommen bei der N27</h1>            
+            <h1>Geld anlegen</h1>            
         </div>
         <div class="navigationsleiste">
             <div class="tooltip">
-            <a href="/"><i class="fa fa-home fa-2x" aria-hidden="true"></i> </a> 
-            <span class="tooltiptext">Home</span>
-        </div>
+                <a href="/"><i class="fa fa-home fa-2x" aria-hidden="true"></i> </a> 
+                <span class="tooltiptext">Home</span>
+            </div>
              -
             <div class="tooltip">
                 <a href="/about"><i class="fa fa-info fa-2x" aria-hidden="true"></i> </a> 
                 <span class="tooltiptext">Über uns</span>
-            </div>
-            
+            </div>            
              - 
              <div class="tooltip">
                 <a href="/profil"><i class="fa fa-user-circle-o fa-2x" aria-hidden="true"></i></a>
                 <span class="tooltiptext">Konto</span>
-            </div>
-            
-            
+            </div>      
              - 
              <div class="tooltip">
                 <a href="/support"><i class="fa fa-question-circle fa-2x" aria-hidden="true"></i> </a> 
                 <span class="tooltiptext">Support</span>
             </div>
-
             -
              <div class="tooltip">
                 <a href="/login"><i class="fa fa-sign-out fa-2x"></i></a>
@@ -45,27 +41,21 @@
             </div>   
         </div>
         <div class="inhaltsbereich">
-            </form>
-            <button class="save" formaction="/kontoAnlegen"><i class="fa fa-book" aria-hidden="true"></i> Konto anlegen </button>
-            </form>
-            <form>
-                <button class="save" formaction="/kontostandAnzeigen"> <i class="fa fa-university" aria-hidden="true"></i> Kontostand anzeigen</button>
-            </form>
-            <form>
-                <button class="save" formaction="/kontobewegung"><i class="fa fa-book" aria-hidden="true"></i> Kontobewegungen </button>
-            </form>
-            <form>
-                <button class="save" formaction="/ueberweisenTaetigen"><i class="fa fa-paper-plane-o" aria-hidden="true"></i> Überweisung tätigen </button>
-            </form>
-            <form>
-                <button class="save" formaction="/geldanlegen"> <i class="fa fa-calculator" aria-hidden="true"></i> Geld anlegen</button>
-            </form>
-            <form>
-                <button class="save" formaction="/kreditrechner"> <i class="fa fa-calculator" aria-hidden="true"></i> Kredit berechnen </button>
-            </form>
-             
-           
+            <form method="post">
+                
+                <label1 for="fname">Guthaben (wird am Ende der Laufzeit ausgezahlt):</label><br>
+                <input name="Guthaben" type="number" class="meldung1" value=<%= Guthaben %> > <br>
+                <label1 type="number"for="lname">Zinssatz:</label><br>
+                <input name="Zinssatz" type="number" class="meldung1" value=<%= Zinssatz %> > <br> 
+                <label1 for="lname">Anlagezeitraum:</label><br>
+                <input name="Laufzeit" type="number" class="meldung1" value=<%= Laufzeit %> > <br> 
+                <from>
+                    <button class="save" formaction="/geldanlegen" > <i class="fa fa-calculator" aria-hidden="true"></i>  Berechnen</button>
+                </from>
+                    <label1 for="lname">Endguthaben :</label><br>
+                        <input name="Kreditkosten" type="number" class="meldung1" readonly value=<%= Ergebnis %> > <br> 
             
+            <p class="meldung2"></p>
         </div>
         <div class="fusszeile">
             &copy; 2022 GW21A

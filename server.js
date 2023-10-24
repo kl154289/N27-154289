@@ -172,7 +172,7 @@ var dbVerbindung = mysql.createConnection({
 
     
 
-    dbVerbindung.query('INSERT INTO kunde(idKunde, vorname, nachname, ort, kennwort, mail) VALUES (154289, "Pit", "Kiff", "BOR", "123!", "pk@web.de") ;', function (fehler) {
+    dbVerbindung.query('INSERT INTO kunde(idKunde, vorname, nachname, ort, kennwort, mail) VALUES (154289, "Lukas", "K.", "BOR", "123", "pk@web.de") ;', function (fehler) {
       
         // Falls ein Problem bei der Query aufkommt, ...
         
@@ -309,12 +309,6 @@ konto.IBAN = "DE12401111110022888816"
 konto.Kontoart = "Giro"
 konto.PIN = 1234
 
-let kredit = new Kredit
-
-kredit.Zinssatz = 1 
-kredit.Kreditbetrag = 100
-kredit.Laufzeit = 1
-kredit.GesamtkostenKredit = this.Kreditbetrag * this.Zinssatz / 100 + this.Kreditbetrag
 
 const express = require('express')
 const bodyParser = require('body-parser')
@@ -372,7 +366,19 @@ meineApp.post('/login',(browserAnfrage, serverAntwort, next) => {
     // Die Identität des Kunden wird überprüft. 
     // if and javascript 
     
-    if(idKunde == kunde.IdKunde && kennwort == kunde.Kennwort){
+    dbVerbindung.query('SELECT * FROM kunde WHERE idKunde = '+idKunde+' AND kennwort ="'+kennwort+'";', function (fehler, result) {
+      
+        // Der result (alle meine Konte werden auf der Konsiole gelockt)
+
+        console.log(result)
+  
+        if(result.length===1){
+            console.log("die Zugangsdaten sind korrekt ")
+        }else{
+            console.log("die Zugangsdaten sind nicht korrekt ")
+        }
+
+    if(result.length===1){
 
         // Ein Cookie namens 'istAngemeldetAls' wird beim Browser gesetzt.#
         // Der Wert des Cookies ist das in eine Zeichenkette umgewandelte Kunden-Objekt.
@@ -397,7 +403,7 @@ meineApp.post('/login',(browserAnfrage, serverAntwort, next) => {
     serverAntwort.render('login.ejs', {
         Meldung : "Bitte geben sie ihere Zugangsdaten ein. "
     })         
-        
+})
 })
 
 // Wenn die login-Seite im Browser aufgerufen wird, ...
@@ -432,8 +438,9 @@ meineApp.get('/about',(browserAnfrage, serverAntwort, next) => {
             Meldung : ""
         })  
     }             
-             
+         
 }) 
+
 
 meineApp.get('/profil',(browserAnfrage, serverAntwort, next) => {
     if(browserAnfrage.signedCookies['istAngemeldetAls']){
@@ -657,13 +664,21 @@ meineApp.post('/kontostandAnzeigen',(browserAnfrage, serverAntwort, next) => {
     
 
 }) 
+
+//let kredit = new Kredit
+
+//kredit.Zinssatz = 1 
+//kredit.Kreditbetrag = 100
+//kredit.Laufzeit = 1
+//kredit.GesamtkostenKredit = this.Kreditbetrag * this.Zinssatz / 100 + this.Kreditbetrag
+
 meineApp.get('/kreditrechner',(browserAnfrage, serverAntwort, next) => {
     if(browserAnfrage.signedCookies['istAngemeldetAls']){
         serverAntwort.render('kreditrechner.ejs', {
-       Kreditbetrag: kredit.Kreditbetrag,
-       Zinssatz: kredit.Zinssatz,
-       Laufzeit: kredit.Laufzeit,
-       Ergebnis: kredit.GesamtkostenKredit, 
+       Kreditbetrag: "",
+       Zinssatz: "",
+       Laufzeit: "",
+       Ergebnis: "", 
        Erfolgsmeldung: "" 
         })
 
@@ -677,14 +692,28 @@ meineApp.get('/kreditrechner',(browserAnfrage, serverAntwort, next) => {
             
     
 }) 
+// Die Funktion meineApp.post wird ausgeführt, wenn der Button gedrückt wird 
 
 meineApp.post('/kreditrechner',(browserAnfrage, serverAntwort, next) => {
     if(browserAnfrage.signedCookies['istAngemeldetAls']){
+
+        // Der wert der Variablen namens Kreditbetrag auss dem Formular in der EJS 
+        // Wir eine variablen namens betrag zugewiesen.
+
+        let kreditbetrag = browserAnfrage.body.Kreditbetrag
+        let zinssatz = browserAnfrage.body.Zinssatz
+        let laufzeit = browserAnfrage.body.Laufzeit
+        
+       let kreditkosten = parseFloat(kreditbetrag) * (parseFloat(zinssatz) /100) * laufzeit
+
+        
+        
+
         serverAntwort.render('kreditrechner.ejs', {
-       Kreditbetrag: kredit.Kreditbetrag,
-       Zinssatz: kredit.Zinssatz,
-       Laufzeit: kredit.Laufzeit,
-       Ergebnis: kredit.GesamtkostenKredit
+       Kreditbetrag: kreditbetrag,
+       Zinssatz: zinssatz,
+       Laufzeit: laufzeit,
+       Ergebnis: kreditkosten + parseFloat(kreditbetrag)
         })
 
     }else{
@@ -1073,6 +1102,71 @@ meineApp.post('/kontobewegung',(browserAnfrage, serverAntwort, next) => {
             
     
 }) 
+
+meineApp.get('/geldanlegen',(browserAnfrage, serverAntwort, next) => {
+    if(browserAnfrage.signedCookies['istAngemeldetAls']){
+        serverAntwort.render('geldanlegen.ejs', {
+       Guthaben: "",
+       Zinssatz: "",
+       Laufzeit: "",
+       Ergebnis: "", 
+       Erfolgsmeldung: "" 
+        })
+
+    }else{
+
+    
+        serverAntwort.render('login.ejs', {
+            Meldung : ""
+        })  
+    } 
+            
+    
+}) 
+// Die Funktion meineApp.post wird ausgeführt, wenn der Button gedrückt wird 
+
+meineApp.post('/geldanlegen',(browserAnfrage, serverAntwort, next) => {
+    if(browserAnfrage.signedCookies['istAngemeldetAls']){
+
+        // Der wert der Variablen namens Guthaben aus dem Formular in der EJS 
+        // Wir eine variablen namens betrag zugewiesen.
+
+        let guthaben = browserAnfrage.body.Guthaben
+        let zinssatz = browserAnfrage.body.Zinssatz
+        let laufzeit = browserAnfrage.body.Laufzeit
+        
+       // wenn die Laufzeit 0 Jahre beträgt wird die Schleife nicht durchlaufen und der Rückzahlungsbetrag entspricht den Einzahlungsbetrag.
+
+        let rueckzahlungsbetrag = parseFloat(guthaben);
+
+        // Eine Forschleife ist eine Kontrollstruktur um eine Aufgabe mehrmals auzuführen solange eine bestimmte Bedingung (i<laufzeit) erfüllt ist.
+        // i wird hier mit jeden schleifendurchlauf um 1 hochgezählt (i++) 
+       for(let i = 0; i < laufzeit; i++) {
+        // mit jeden schleifendurchlauf wird der der rückzahlungsbetrag.... 
+        rueckzahlungsbetrag += (rueckzahlungsbetrag * zinssatz/100) 
+
+       }
+        
+        let erloes = rueckzahlungsbetrag
+
+        serverAntwort.render('geldanlegen.ejs', {
+       Guthaben: guthaben,
+       Zinssatz: zinssatz,
+       Laufzeit: laufzeit,
+       Ergebnis: erloes 
+        })
+
+    }else{
+
+    
+        serverAntwort.render('login.ejs', {
+            Meldung : ""
+        })  
+    } 
+            
+    
+}) 
+
 
 //require('./Uebungen/ifUndElse.js')
 //require('./Uebungen/klasseUndObjekt.js')
