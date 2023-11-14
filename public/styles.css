@@ -207,6 +207,27 @@ a {
   text-decoration: none;
 }
 
+.normal-link {
+  color: black;
+  width: 80%;
+  margin-bottom: 10px;
+  margin-right: 10%;
+  margin-left: 10%;  
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 2.5vh;
+
+}
+
+/* Stile für speziellen Link */
+.special-link {
+  color: red; /* Farbe des speziellen Links */
+  font-weight: bold; /* Fettgedruckte Schrift für den speziellen Link */
+}
+
+
 p {
   color: rgb(0, 0, 0);
   font-family: Arial, Helvetica, sans-serif;

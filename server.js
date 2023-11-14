@@ -71,7 +71,7 @@ var dbVerbindung = mysql.createConnection({
     // Date / Datetime: steht für ein Datum bzw. Uhrzeit 
     // idKunde ist Primary Key. Das bedeutet, dass die idKunde den Datensatz eindeutig
     // kennzeichnet. Das wiederum bedeutet, dass kein zweiter Kunde mit derselben idKunde angelegt werden kann.
-    dbVerbindung.query('CREATE TABLE kunde(idKunde INT(11), vorname VARCHAR(45), nachname VARCHAR(45), ort VARCHAR(45), kennwort VARCHAR(45), mail VARCHAR(45), PRIMARY KEY(idKunde));', function (fehler) {
+    dbVerbindung.query('CREATE TABLE kunde(idKunde INT(11), vorname VARCHAR(45), nachname VARCHAR(45), ort VARCHAR(45), kennwort VARCHAR(45), mail VARCHAR(45), idKundenberater INT(11), PRIMARY KEY(idKunde));', function (fehler) {
         // Falls ein Problem beim der Query aufommt,...
     if (fehler) {
         // ... und der Fehlercode "ER_TABLE_EXISTS_ERROR" lautet, ...
@@ -143,6 +143,40 @@ var dbVerbindung = mysql.createConnection({
                 console.log("Tabelle kredit erfolgreich angelegt.")
          }
       })
+
+      dbVerbindung.query('CREATE TABLE kundenberater(idKundenberater INT(11), vorname VARCHAR(45), nachname VARCHAR(45), position VARCHAR(45), mail VARCHAR(45),rufnummer INT(11), begruessung VARCHAR(45), PRIMARY KEY(idKundenberater), FOREIGN KEY (idKundenberater) REFERENCES kunde(idKunde));', function (fehler) {
+        // Falls ein Problem beim der Query aufommt,...
+    if (fehler) {
+        // ... und der Fehlercode "ER_TABLE_EXISTS_ERROR" lautet, ...
+             if(fehler.code == "ER_TABLE_EXISTS_ERROR"){
+
+        // ... dann wird eine Fehlermeldung geloggt. 
+
+            console.log("Tabelle Kundenberater existiert bereits und wird nicht angelegt.")
+     }else{
+         console.log("Fehler: " + fehler + "Kunde BE")
+         }
+        }else{
+         console.log("Tabelle Kundenberater erfolgreich angelegt.")
+    }
+    })
+
+    dbVerbindung.query('CREATE TABLE bank(name VARCHAR(45), straße VARCHAR(45), postleitzahl INT(11), ort VARCHAR(45), telefonnummer VARCHAR(45), bankleitzahl INT(8),ceo VARCHAR(45), PRIMARY KEY(bankleitzahl));', function (fehler) {
+        // Falls ein Problem beim der Query aufommt,...
+    if (fehler) {
+        // ... und der Fehlercode "ER_TABLE_EXISTS_ERROR" lautet, ...
+             if(fehler.code == "ER_TABLE_EXISTS_ERROR"){
+
+        // ... dann wird eine Fehlermeldung geloggt. 
+
+            console.log("Tabelle Bank existiert bereits und wird nicht angelegt.")
+     }else{
+         console.log("Fehler: " + fehler + "Bank")
+         }
+        }else{
+         console.log("Tabelle Bank erfolgreich angelegt.")
+    }
+    })
       // Eine Tabelle namens Konto wird neu angelegt falls sie noch nicht existiert 
 
       dbVerbindung.query('CREATE TABLE konto(iban VARCHAR(45), idKunde INT(11), anfangssaldo FLOAT, kontoart VARCHAR(45), timestamp TIMESTAMP, PRIMARY KEY(iban));', function (fehler) {
@@ -167,12 +201,13 @@ var dbVerbindung = mysql.createConnection({
          }
       })
   
+      
   // Ein Kunde soll neu in der Datenbank angelegt werden.
   
 
     
 
-    dbVerbindung.query('INSERT INTO kunde(idKunde, vorname, nachname, ort, kennwort, mail) VALUES (154289, "Lukas", "K.", "BOR", "123", "pk@web.de") ;', function (fehler) {
+    dbVerbindung.query('INSERT INTO kunde(idKunde, vorname, nachname, ort, kennwort, mail, idKundenberater) VALUES (154289, "Lukas", "K.", "BOR", "123", "pk@web.de","100011") ;', function (fehler) {
       
         // Falls ein Problem bei der Query aufkommt, ...
         
@@ -191,6 +226,51 @@ var dbVerbindung = mysql.createConnection({
             }
         }else{
                 console.log("Tabelle kunde erfolgreich angelegt.")
+         }
+    });
+
+
+    dbVerbindung.query('INSERT INTO kundenberater(idKundenberater, vorname, nachname, position, mail, rufnummer, begruessung) VALUES (100011, "Hanz", "Schmidt", "Chef", "IchHelfe@gmail.com","11111","Hallo") ;', function (fehler) {
+      
+        // Falls ein Problem bei der Query aufkommt, ...
+        
+        if (fehler) {
+        
+            // ... und der Fehlercode "ER_TABLE_EXISTS_ERROR" lautet, ...
+    
+            if(fehler.code == "ER_TABLE_EXISTS_ERROR"){
+    
+                //... dann wird eine Fehlermdldung geloggt. 
+    
+                console.log("Tabelle kundenberater existiert bereits und wird nicht angelegt.")
+            
+            }else{
+                console.log("Fehler: " + fehler +" BE kunde" )
+            }
+        }else{
+                console.log("Tabelle kundeberater erfolgreich angelegt.")
+         }
+    });
+
+    dbVerbindung.query('INSERT INTO bank(name, straße, postleitzahl, ort , telefonnummer, bankleitzahl,ceo) VALUES ("N27 Bank AG", "Josefstraße 10", 46325,"Borken",02961900, 28000000,"Elon") ;', function (fehler) {
+      
+        // Falls ein Problem bei der Query aufkommt, ...
+        
+        if (fehler) {
+        
+            // ... und der Fehlercode "ER_TABLE_EXISTS_ERROR" lautet, ...
+    
+            if(fehler.code == "ER_TABLE_EXISTS_ERROR"){
+    
+                //... dann wird eine Fehlermdldung geloggt. 
+    
+                console.log("Die Bank existiert bereits und wird nicht angelegt.")
+            
+            }else{
+                console.log("Fehler: " + fehler +" Bank" )
+            }
+        }else{
+                console.log("Die Bank wurde erfolgreich angelegt.")
          }
     });
     
@@ -213,16 +293,15 @@ class Kunde{
         this.Telefon
     }
 }
-class Berater{
+class Kundenberater{
     constructor(){
-        this.IdBerater
-        this.Nachname
-        this.Vorname
-        this.Mail 
-        this.Telefon
-        this.Filiale 
-        this.Bergruessung
-        this.Position 
+        this.idKundenberater
+        this.nachname
+        this.vorname
+        this.mail 
+        this.rufnummer
+        this.bergruessung
+        this.position 
     }
 }
 
@@ -261,32 +340,8 @@ class Kredit {
 
 
 
-// Von der Kunden-Klasse wird eine konkrete Instanz 
-// gebildet. 
 
-let kunde = new Kunde() 
 
-// Die Konkrete Instanz bekommt Eigenschaftswerte 
-// zugewiesen 
-
-kunde.IdKunde = 154289 
-kunde.Nachname = "Han"
-kunde.Vorname = "Hanz"
-kunde.Geburtsdatum = "12.1.2000"
-kunde.Mail = "Hanz@gmail.com"
-kunde.Kennwort = "123"
-kunde.Telefon = 123456789
-
-let berater = new Berater
-
-berater.IdBerater = 100001
-berater.Nachname = "Harry"
-berater.Vorname = "Berater"
-berater.Mail = "IchHelfe@gmail.com"
-berater.Telefon = 123456789
-berater.Filiale = "Borken"
-berater.Bergruessung = "Hallo hau ab das Geld ist nicht echt!"
-berater.Position = "Chef"
 
 
 
@@ -298,16 +353,7 @@ berater.Position = "Chef"
 // um bei der anschließenden Initzialisirung konkrete Eigenschaft-
 // werte für das Objekt zu speichern.
 
-let konto = new Konto
 
-//Bei der Initialisierung werden konkrete Eigenschaften in die reservierten 
-// Speicherzellen geschrieben. 
-// Die Zuweisung von Eigenschaftswerten geschied immer von recht nach links. 
-
-konto.Kontostand = 10
-konto.IBAN = "DE12401111110022888816"
-konto.Kontoart = "Giro"
-konto.PIN = 1234
 
 
 const express = require('express')
@@ -360,27 +406,57 @@ meineApp.post('/login',(browserAnfrage, serverAntwort, next) => {
     const idKunde = browserAnfrage.body.IdKunde 
     const kennwort = browserAnfrage.body.Kennwort
 
+    console.log("Ein Kunde versucht sich anzumelden.")
+
+    // werden aus der console gelogt 
+
     console.log("Id des Kunden: " + idKunde) 
     console.log("Kennwort des Kunden: " + kennwort)
 
     // Die Identität des Kunden wird überprüft. 
     // if and javascript 
+    // Die tabelle kunde wird auf einen kunden mit Idkunde und kennwort abgefragt  
     
     dbVerbindung.query('SELECT * FROM kunde WHERE idKunde = '+idKunde+' AND kennwort ="'+kennwort+'";', function (fehler, result) {
       
-        // Der result (alle meine Konte werden auf der Konsiole gelockt)
+        // Der oder Die zurückgegebnen Datensetze stecken im result und werden auf der Konsole gelockt. 
 
         console.log(result)
-  
-        if(result.length===1){
-            console.log("die Zugangsdaten sind korrekt ")
-        }else{
-            console.log("die Zugangsdaten sind nicht korrekt ")
-        }
 
+        // Wenn im result exakt ein Datensatz zurück gegeben wird bedeutet das, das es den kunden mit der idkunde und kennwort gibt.
+        // Es kann in der Datenbank höchsten ein Datensatz mit der Kombintzion Idkunde und kennwort geben, da die idkunde ein primmarykey ist 
+  
+        
     if(result.length===1){
 
-        // Ein Cookie namens 'istAngemeldetAls' wird beim Browser gesetzt.#
+         // Von der Kunden-Klasse wird eine konkrete Instanz 
+            // gebildet. 
+            // Wenn der Kunde berechtigt ist, wird aus dem Result ein kundenobjekt erzeugt 
+
+            // (let kunde) Es wir ein objekt mit kunde deklariert 
+            // new kunde das kunde wird instanziert (es werden speicherzellen resaviert)
+
+            let kunde = new Kunde() 
+
+            // Die Konkrete Instanz bekommt Eigenschaftswerte zugewiesen (innizaliesierung) 
+            // mit [0] wir der erset Datensatz auseglesen 
+            // Danach wierd der wert der Eigenschaft zugewiesen 
+
+            kunde.IdKunde = result[0].idKunde
+            kunde.Nachname = result[0].nachname
+            kunde.Vorname = result[0].vorname
+            kunde.Mail = result[0].mail
+            kunde.Kennwort = result[0].kennwort
+            kunde.Ort = result[0].ort
+
+            console.log(result[0].idKunde)
+            console.log(result[0].nachname)
+            console.log(result[0].vorname)
+            console.log(result[0].mail)
+            console.log(result[0].kennwort)
+            console.log(result[0].ort)
+
+        // Ein Cookie namens 'istAngemeldetAls' wird beim Browser gesetzt.
         // Der Wert des Cookies ist das in eine Zeichenkette umgewandelte Kunden-Objekt.
         // Der Cookie wird signiert, also gegen Manpulation geschützt. 
 
@@ -428,7 +504,22 @@ meineApp.get('/about',(browserAnfrage, serverAntwort, next) => {
     // about-Seite gelänkt.
 
     if(browserAnfrage.signedCookies['istAngemeldetAls']){
-        serverAntwort.render('about.ejs')
+        dbVerbindung.query('SELECT * FROM bank WHERE blz = 28000000;', function (fehler, result) {    
+            console.log(result)
+
+        serverAntwort.render('about.ejs', {
+            name: "",
+            straße: "",
+            postleitzahl: "" ,
+            ort:"" ,
+            telefonnummer:"",
+            bankleitzahl: "",
+            ceo:"",
+            ErfolgsmeldungBerater: ""
+        })
+
+
+    })
     }else{
 
     // Wenn der Kunde nichtbereits angemeldet ist, soll die 
@@ -444,10 +535,19 @@ meineApp.get('/about',(browserAnfrage, serverAntwort, next) => {
 
 meineApp.get('/profil',(browserAnfrage, serverAntwort, next) => {
     if(browserAnfrage.signedCookies['istAngemeldetAls']){
+
+        
+
+        const kunde = JSON.parse(browserAnfrage.signedCookies.istAngemeldetAls)
+
+        console.log(kunde)
+
+        // Die eigenschaftswerte des Kundens stecken im Cookie 
+
         serverAntwort.render('profil.ejs', {
             Vorname: kunde.Vorname,
             Nachname: kunde.Nachname,
-            Telefon: kunde.Telefon,
+            Ort: kunde.Ort,
             Mail: kunde.Mail,
             Password: kunde.Kennwort,
             Erfolgsmeldung: ""
@@ -466,15 +566,39 @@ meineApp.get('/profil',(browserAnfrage, serverAntwort, next) => {
 
 meineApp.get('/support',(browserAnfrage, serverAntwort, next) => {
     if(browserAnfrage.signedCookies['istAngemeldetAls']){
+        dbVerbindung.query('SELECT * FROM kundenberater WHERE idKundenberater = 100011;', function (fehler, result) {    
+            console.log(result)
+
+        let kundenberater = new Kundenberater
+
+        if(result.length === 0){
+            kundenberater.vorname = ""
+            kundenberater.nachname = ""
+            kundenberater.bergruessung = ""
+            kundenberater.mail = ""
+            kundenberater.rufnummer = ""
+            kundenberater.position = ""
+
+        }else{
+            kundenberater.vorname = result[0].vorname
+            kundenberater.nachname = result[0].nachname
+            kundenberater.bergruessung = result[0].bergruessung
+            kundenberater.mail = result[0].mail
+            kundenberater.rufnummer = result[0].rufnummer
+            kundenberater.position = result[0].position
+        }
+
+        
+
         serverAntwort.render('support.ejs', {
-            VornameBerater: berater.Vorname,
-            NachnameBerater: berater.Nachname,
-            TelefonBerater: berater.Telefon,
-            MailBerater: berater.Mail,
-            FilialeBerater: berater.Filiale,
-            Bergruessung: berater.Bergruessung,
-            Position: berater.Position,
+            VornameBerater: kundenberater.vorname,
+            NachnameBerater: kundenberater.nachname,
+            TelefonBerater: kundenberater.rufnummer,
+            MailBerater: kundenberater.mail,
+            Bergruessung: kundenberater.bergruessung,
+            Position: kundenberater.position,
             ErfolgsmeldungBerater: ""
+        })
         })
 
     }else{
@@ -754,6 +878,8 @@ meineApp.get('/kontoAnlegen',(browserAnfrage, serverAntwort, next) => {
 //und das Formular abgesendet ('gepostet')wird. 
 meineApp.post('/kontoAnlegen',(browserAnfrage, serverAntwort, next) => {   
 
+    const kunde = JSON.parse(browserAnfrage.signedCookies.istAngemeldetAls)
+
     let erfolgsmeldung = ""
     
     // Die im Formulsr eingegebene wird an die Konstante namens kontoArt zugewiesen.
@@ -802,7 +928,7 @@ meineApp.post('/kontoAnlegen',(browserAnfrage, serverAntwort, next) => {
     }
 // Für die generrirte IBAN muss ein neuer Datensatz in der Tabelle konto angelegt werden. 
 
-dbVerbindung.query('INSERT INTO konto(iban, idKunde, anfangssaldo, kontoart, timestamp) VALUES ("' + iban + '",154289, 1,"'+ kontoart +'", NOW()) ;', function (fehler) {
+dbVerbindung.query('INSERT INTO konto(iban, idKunde, anfangssaldo, kontoart, timestamp) VALUES ("' + iban + '","'+kunde.idKunde+'", 1,"'+ kontoart +'", NOW()) ;', function (fehler) {
       
     // Falls ein Problem bei der Query aufkommt, ...
     

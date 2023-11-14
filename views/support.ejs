@@ -53,11 +53,10 @@
                 <label1 for="lname"> Position:</label><br>
                 <input class="meldung1" name="Position" readonly value=<%= Position %>> <br>
                 <label1 for="lname"> Email:</label><br>
-                <input type="email" name="Mail" class="meldung1" readonly value=<%= MailBerater %>> <br> 
+                <input type="email"  name="Mail" class="meldung1" readonly value=<%= MailBerater %>> <br> 
+                <label><a class="normal-link" href="mailto:<%=MailBerater%>subject=Anfrage%20an%20Kundenberater">Kontaktieren Sie den Kundenberater</a></label>
                 <label1 for="lname"> Telefon:</label><br>
                 <input type="tel" name="Telefon" class="meldung1" readonly value=<%= TelefonBerater %>> <br>
-                <label1 for="lname"> Filiale:</label><br>
-                <input class="meldung1" name="Filiale" readonly value=<%= FilialeBerater %>> <br>
                 <label1 for="lname"> Begrüßung:</label><br>
                 <label2><%= Bergruessung%></label2> <br>
             </form>
