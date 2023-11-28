@@ -161,7 +161,7 @@ var dbVerbindung = mysql.createConnection({
     }
     })
 
-    dbVerbindung.query('CREATE TABLE bank(name VARCHAR(45), straße VARCHAR(45), postleitzahl INT(11), ort VARCHAR(45), telefonnummer VARCHAR(45), bankleitzahl INT(8),ceo VARCHAR(45), PRIMARY KEY(bankleitzahl));', function (fehler) {
+    dbVerbindung.query('CREATE TABLE bank(name VARCHAR(45), strasse VARCHAR(45), postleitzahl INT(11), ort VARCHAR(45), telefonnummer VARCHAR(45), bankleitzahl INT(8),ceo VARCHAR(45), PRIMARY KEY(bankleitzahl));', function (fehler) {
         // Falls ein Problem beim der Query aufommt,...
     if (fehler) {
         // ... und der Fehlercode "ER_TABLE_EXISTS_ERROR" lautet, ...
@@ -219,13 +219,13 @@ var dbVerbindung = mysql.createConnection({
     
                 //... dann wird eine Fehlermdldung geloggt. 
     
-                console.log("Tabelle kunde existiert bereits und wird nicht angelegt.")
+                console.log("der kunde existiert bereits und wird nicht angelegt.")
             
             }else{
                 console.log("Fehler: " + fehler +" I kunde" )
             }
         }else{
-                console.log("Tabelle kunde erfolgreich angelegt.")
+                console.log("der kunde wurde erfolgreich angelegt.")
          }
     });
 
@@ -242,22 +242,21 @@ var dbVerbindung = mysql.createConnection({
     
                 //... dann wird eine Fehlermdldung geloggt. 
     
-                console.log("Tabelle kundenberater existiert bereits und wird nicht angelegt.")
+                console.log("der kundenberater existiert bereits und wird nicht angelegt.")
             
             }else{
                 console.log("Fehler: " + fehler +" BE kunde" )
             }
         }else{
-                console.log("Tabelle kundeberater erfolgreich angelegt.")
+                console.log("der kundeberater wurde erfolgreich angelegt.")
          }
     });
 
-    dbVerbindung.query('INSERT INTO bank(name, straße, postleitzahl, ort , telefonnummer, bankleitzahl,ceo) VALUES ("N27 Bank AG", "Josefstraße 10", 46325,"Borken",02961900, 28000000,"Elon") ;', function (fehler) {
+    dbVerbindung.query('INSERT INTO bank(name, strasse, postleitzahl, ort , telefonnummer, bankleitzahl,ceo) VALUES ("N27 Bank AG", "Josefstraße 10", 46325,"Borken","02961900", 28000000,"Elon") ;', function (fehler) {
       
         // Falls ein Problem bei der Query aufkommt, ...
         
         if (fehler) {
-        
             // ... und der Fehlercode "ER_TABLE_EXISTS_ERROR" lautet, ...
     
             if(fehler.code == "ER_TABLE_EXISTS_ERROR"){
@@ -504,17 +503,17 @@ meineApp.get('/about',(browserAnfrage, serverAntwort, next) => {
     // about-Seite gelänkt.
 
     if(browserAnfrage.signedCookies['istAngemeldetAls']){
-        dbVerbindung.query('SELECT * FROM bank WHERE blz = 28000000;', function (fehler, result) {    
+        dbVerbindung.query('SELECT * FROM bank WHERE  bankleitzahl= 28000000;', function (fehler, result) {    
             console.log(result)
 
         serverAntwort.render('about.ejs', {
-            name: "",
-            straße: "",
-            postleitzahl: "" ,
-            ort:"" ,
-            telefonnummer:"",
-            bankleitzahl: "",
-            ceo:"",
+            name: result[0].name,
+            strasse: result[0].strasse,
+            postleitzahl: result[0].postleitzahl,
+            ort: result[0].ort,
+            telefonnummer:result[0].telefonnummer,
+            bankleitzahl: result[0].bankleitzahl,
+            ceo: result[0].ceo,
             ErfolgsmeldungBerater: ""
         })
 
