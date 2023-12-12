@@ -386,11 +386,30 @@ meineApp.get('/',(browserAnfrage, serverAntwort, next) => {
     // dann ist die Prüfung wahr und es wird die gerenderte Index.Seite an den Browser
     // zurückgegeben. Anderfalls wird die Login.Seite sn den Browser gegeben. 
 
-
+    
 
     if(browserAnfrage.signedCookies['istAngemeldetAls']){
 
-        let nutzungsbedingungAkzeptiert  = "enabled"
+        // Ein Kundenobjekt wir dmit allen eigenschaftenten und eigenschaftswerten aus dem Coohie insatnziert und inizaliesiert 
+
+        const kunde = JSON.parse(browserAnfrage.signedCookies.istAngemeldetAls)
+
+        // Der Cookie wird auf der Console gelockt 
+        console.log(JSON.parse(browserAnfrage.signedCookies.istAngemeldetAls))
+        
+        console.log(kunde)
+
+        let nutzungsbedingungAkzeptiert  = "disabled"
+
+        // Wenn die Nutzungsbedingung im Cookie mit ja gesoeichert ist dann wirt die lokale variable nutzungsbedingungen Aktzeptiert mit enabled überschrieben.
+
+
+        if(kunde.nutzungsbedingungAkzeptiert === ja){
+            nutzungsbedingungAkzeptiert  = "enabled"
+            console.log("Die Nutzungsbedingungen wurden bereits akzeptiert")
+        }
+
+       
 
 
         serverAntwort.render('index.ejs',{
@@ -461,7 +480,7 @@ meineApp.post('/login',(browserAnfrage, serverAntwort, next) => {
             kunde.Kennwort = result[0].kennwort
             kunde.Ort = result[0].ort
             kunde.idKundenberater = result[0].idKundenberater
-            kunde.NutzungsbedingungAkzeptiert.result[0].nutzungsbedingungAkzeptiert
+            kunde.NutzungsbedingungAkzeptiert = result[0].nutzungsbedingungAkzeptiert
 
             console.log(result[0].idKunde)
             console.log(result[0].nachname)
@@ -1325,7 +1344,56 @@ meineApp.post('/geldanlegen',(browserAnfrage, serverAntwort, next) => {
     
 }) 
 
+meineApp.get('/nutzungsbedingungenAkzeptieren',(browserAnfrage, serverAntwort, next) => { 
 
+    // wenn der Anmelde Cooki gesätzt ist, wird der Nutzer zur 
+    // about-Seite gelänkt.
+
+    if(browserAnfrage.signedCookies['istAngemeldetAls']){
+        
+
+        serverAntwort.render('nutzungsbedingungenAkzeptieren.ejs', {
+            ErfolgsmeldungBerater: ""
+        })
+
+
+    
+    }else{
+
+    // Wenn der Kunde nichtbereits angemeldet ist, soll die 
+    // Login-Seite an den Browser gegeben werden.
+
+        serverAntwort.render('login.ejs', {
+            Meldung : ""
+        })  
+    }             
+         
+}) 
+meineApp.post('/nutzungsbedingungenAkzeptieren',(browserAnfrage, serverAntwort, next) => { 
+
+    // wenn der Anmelde Cooki gesätzt ist, wird der Nutzer zur 
+    // about-Seite gelänkt.
+
+    if(browserAnfrage.signedCookies['istAngemeldetAls']){
+        
+
+        serverAntwort.render('nutzungsbedingungenAkzeptieren.ejs', {
+            ErfolgsmeldungBerater: ""
+        })
+
+
+    
+    }else{
+
+    // Wenn der Kunde nichtbereits angemeldet ist, soll die 
+    // Login-Seite an den Browser gegeben werden.
+
+        serverAntwort.render('login.ejs', {
+            Meldung : ""
+        })  
+    }             
+         
+})
 //require('./Uebungen/ifUndElse.js')
 //require('./Uebungen/klasseUndObjekt.js')
 //require('./Klausuren/20220531_klausur.js')
