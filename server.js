@@ -2,6 +2,9 @@
 
 var IBAN = require('iban');
 
+var weather = require('weather-js');
+
+
 
 
 
@@ -71,7 +74,7 @@ var dbVerbindung = mysql.createConnection({
     // Date / Datetime: steht für ein Datum bzw. Uhrzeit 
     // idKunde ist Primary Key. Das bedeutet, dass die idKunde den Datensatz eindeutig
     // kennzeichnet. Das wiederum bedeutet, dass kein zweiter Kunde mit derselben idKunde angelegt werden kann.
-    dbVerbindung.query('CREATE TABLE kunde(idKunde INT(11), vorname VARCHAR(45), nachname VARCHAR(45), ort VARCHAR(45), kennwort VARCHAR(45), mail VARCHAR(45), idKundenberater INT(11), PRIMARY KEY(idKunde));', function (fehler) {
+    dbVerbindung.query('CREATE TABLE kunde(idKunde INT(11), vorname VARCHAR(45), nachname VARCHAR(45), ort VARCHAR(45), kennwort VARCHAR(45), mail VARCHAR(45), idKundenberater INT(11), nutzungsbedingungAkzeptiert VARCHAR(45), PRIMARY KEY(idKunde));', function (fehler) {
         // Falls ein Problem beim der Query aufommt,...
     if (fehler) {
         // ... und der Fehlercode "ER_TABLE_EXISTS_ERROR" lautet, ...
@@ -207,7 +210,7 @@ var dbVerbindung = mysql.createConnection({
 
     
 
-    dbVerbindung.query('INSERT INTO kunde(idKunde, vorname, nachname, ort, kennwort, mail, idKundenberater) VALUES (154289, "Lukas", "K.", "BOR", "123", "pk@web.de","100011") ;', function (fehler) {
+    dbVerbindung.query('INSERT INTO kunde(idKunde, vorname, nachname, ort, kennwort, mail, idKundenberater, nutzungsbedingungAkzeptiert) VALUES (154289, "Lukas", "K.", "BOR", "123", "pk@web.de","100011","nein") ;', function (fehler) {
       
         // Falls ein Problem bei der Query aufkommt, ...
         
@@ -290,6 +293,8 @@ class Kunde{
         this.Geburtsdatum
         this.Mail 
         this.Telefon
+        this.idKundenberater
+        this.NutzungsbedingungAkzeptiert
     }
 }
 class Kundenberater{
@@ -381,8 +386,16 @@ meineApp.get('/',(browserAnfrage, serverAntwort, next) => {
     // dann ist die Prüfung wahr und es wird die gerenderte Index.Seite an den Browser
     // zurückgegeben. Anderfalls wird die Login.Seite sn den Browser gegeben. 
 
+
+
     if(browserAnfrage.signedCookies['istAngemeldetAls']){
-        serverAntwort.render('index.ejs')
+
+        let nutzungsbedingungAkzeptiert  = "enabled"
+
+
+        serverAntwort.render('index.ejs',{
+            enabledOderDisabled: nutzungsbedingungAkzeptiert 
+        })
     }else{
 
     // Wenn der Kunde nichtbereits angemeldet ist, soll die 
@@ -447,6 +460,8 @@ meineApp.post('/login',(browserAnfrage, serverAntwort, next) => {
             kunde.Mail = result[0].mail
             kunde.Kennwort = result[0].kennwort
             kunde.Ort = result[0].ort
+            kunde.idKundenberater = result[0].idKundenberater
+            kunde.NutzungsbedingungAkzeptiert.result[0].nutzungsbedingungAkzeptiert
 
             console.log(result[0].idKunde)
             console.log(result[0].nachname)
@@ -454,6 +469,8 @@ meineApp.post('/login',(browserAnfrage, serverAntwort, next) => {
             console.log(result[0].mail)
             console.log(result[0].kennwort)
             console.log(result[0].ort)
+            console.log(result[0].idKundenberater)
+            console.log(result[0].nutzungsbedingungAkzeptiert) 
 
         // Ein Cookie namens 'istAngemeldetAls' wird beim Browser gesetzt.
         // Der Wert des Cookies ist das in eine Zeichenkette umgewandelte Kunden-Objekt.
@@ -468,7 +485,16 @@ meineApp.post('/login',(browserAnfrage, serverAntwort, next) => {
         // Wenn die Id des Kunden mit der Eingabe im Browser übereinstimmt
         // Und("&&") das Kennwort ebenfalls 
         // dann gibt der SErver die gerenderte Index-Seite zurück.
-        serverAntwort.render('index.ejs', {})          
+        let nutzungsbedingungAkzeptiert = "disabled" 
+        // Standartmäßig disabled
+
+        if(kunde.NutzungsbedingungAkzeptiert === "ja"){
+        let nutzungsbedingungAkzeptiert  = "ensabled"}
+       
+
+        serverAntwort.render('index.ejs', {
+        enabledOderDisabled: nutzungsbedingungAkzeptiert 
+        })          
     }else{
         // Wenn sie nicht übereinstimmen wird die Login-Seite geladen. 
     serverAntwort.render('login.ejs', {
@@ -531,11 +557,14 @@ meineApp.get('/about',(browserAnfrage, serverAntwort, next) => {
          
 }) 
 
+// wenn die Profiel-Seite angseurt wird, wir die meine App.gett ('/profile...) abgearbeitet. 
 
 meineApp.get('/profil',(browserAnfrage, serverAntwort, next) => {
     if(browserAnfrage.signedCookies['istAngemeldetAls']){
 
-        
+        // Wenn der Cookie ist AngemeldetAls im Browser existiert dann wird der Rumpf der if kontrollstruktur abgearbeitet.
+        // Wenn kein Cookie existiert ist die pruefung false und somit wird mit else die Login-Seite geraendert. 
+        // Das Kundenobjekt lebt nur während der Abarbeitung der meineApp.get und wird dann wieder verworfen. 
 
         const kunde = JSON.parse(browserAnfrage.signedCookies.istAngemeldetAls)
 
@@ -565,7 +594,11 @@ meineApp.get('/profil',(browserAnfrage, serverAntwort, next) => {
 
 meineApp.get('/support',(browserAnfrage, serverAntwort, next) => {
     if(browserAnfrage.signedCookies['istAngemeldetAls']){
-        dbVerbindung.query('SELECT * FROM kundenberater WHERE idKundenberater = 100011;', function (fehler, result) {    
+        const kunde = JSON.parse(browserAnfrage.signedCookies.istAngemeldetAls)
+
+        console.log(kunde.idKundenberater)
+
+        dbVerbindung.query('SELECT * FROM kundenberater WHERE idKundenberater = '+ kunde.idKundenberater +';', function (fehler, result) {    
             console.log(result)
 
         let kundenberater = new Kundenberater
