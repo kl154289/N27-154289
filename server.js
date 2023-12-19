@@ -404,7 +404,7 @@ meineApp.get('/',(browserAnfrage, serverAntwort, next) => {
         // Wenn die Nutzungsbedingung im Cookie mit ja gesoeichert ist dann wirt die lokale variable nutzungsbedingungen Aktzeptiert mit enabled überschrieben.
 
 
-        if(kunde.nutzungsbedingungAkzeptiert === ja){
+        if(kunde.nutzungsbedingungAkzeptiert === "ja"){
             nutzungsbedingungAkzeptiert  = "enabled"
             console.log("Die Nutzungsbedingungen wurden bereits akzeptiert")
         }
@@ -1375,9 +1375,11 @@ meineApp.post('/nutzungsbedingungenAkzeptieren',(browserAnfrage, serverAntwort, 
     // about-Seite gelänkt.
 
     if(browserAnfrage.signedCookies['istAngemeldetAls']){
+        console.log("Die Nutzungsbedingungen wurden Aktzeptiert")
         
 
-        serverAntwort.render('nutzungsbedingungenAkzeptieren.ejs', {
+        serverAntwort.render('index.ejs', {
+            enabledOderDisabled: "enabled", 
             ErfolgsmeldungBerater: ""
         })
 
@@ -1394,6 +1396,18 @@ meineApp.post('/nutzungsbedingungenAkzeptieren',(browserAnfrage, serverAntwort, 
     }             
          
 })
+
+meineApp.get('/404',(browserAnfrage, serverAntwort, next) => { 
+
+
+    serverAntwort.render('404.ejs', {
+        
+    })
+    
+
+          
+         
+}) 
 //require('./Uebungen/ifUndElse.js')
 //require('./Uebungen/klasseUndObjekt.js')
 //require('./Klausuren/20220531_klausur.js')
